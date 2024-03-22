@@ -87,10 +87,12 @@ function selectFile(file) {
                 </div>
 
                 <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
-                    <table>
+                    <table class="table table-striped">
                         <thead>
-                        <td>id</td>
-                        <td>name</td>
+                        <tr>
+                            <th>id</th>
+                            <th>name</th>
+                        </tr>
                         </thead>
                         <tbody>
                         <tr v-for="(book, index) in books">
