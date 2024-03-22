@@ -4,3 +4,4 @@
 - Vue.js3
 - Inertia
 - Vite
+- Bootstrap5.3.0
