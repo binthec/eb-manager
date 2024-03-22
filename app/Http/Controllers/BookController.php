@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,9 +32,18 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request) :RedirectResponse
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+        ]);
+
+        // ファイルをストレージに保存
+        $validated['filepath'] = $request->file->store('books/' . $request->user()->id);
+        // DBに情報を保存
+        $request->user()->books()->create($validated);
+
+        return redirect(route('books.index'));
     }
 
     /**
