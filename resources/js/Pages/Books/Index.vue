@@ -1,4 +1,4 @@
-<script setup>
+<script setup xmlns="http://www.w3.org/1999/html">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -70,26 +70,31 @@ function onFileSelected(event) {
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Electronic Books　電子帳簿</h2>
         </template>
 
-        <div class="p-4 bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4 sm:mb-6 lg:mb-8">
-            <form @submit.prevent="form.post(route('books.store'), { onSuccess: () => form.reset() })">
-                <label for="formFile" class="form-label">ファイルを選択してください</label>
-                <input class="form-control" type="file" id="formFile" @change="onFileSelected">
-                <PrimaryButton class="mt-4 float-end">submit</PrimaryButton>
-            </form>
-        </div>
+        <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
+            <div class="pb-4">
+                <form class="row" @submit.prevent="form.post(route('books.store'), { onSuccess: () => form.reset() })">
+                    <div class="col-6">
+                        <input class="form-control" type="file" id="formFile" @change="onFileSelected">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-success">submit</button>
+                    </div>
+                </form>
+            </div>
 
-        <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
-            <table class="table table-striped">
+            <table class="table table-bordered">
                 <thead>
-                <tr>
+                <tr class="text-center table-success">
                     <th>id</th>
-                    <th>name</th>
+                    <th>ファイル名</th>
+                    <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(book, index) in books">
-                    <td>{{ book.id }}</td>
+                    <td class="text-center">{{ book.id }}</td>
                     <td>{{ book.filename }}</td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>
