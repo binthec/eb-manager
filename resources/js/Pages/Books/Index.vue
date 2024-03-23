@@ -3,6 +3,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import {Head, useForm} from "@inertiajs/vue3";
 import {reactive} from "vue";
+import {Link} from "@inertiajs/vue3";
+
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
 defineProps(['books']);
 
@@ -11,10 +15,22 @@ const selected_file = reactive({
     data_url: ''
 });
 
+/**
+ * 送信用の値
+ * @type {InertiaForm<{filename: string, file: null}>}
+ */
 const form = useForm({
     filename: '',
     file: null
 })
+
+/**
+ * 登録ボタン押した時の挙動
+ */
+function formReset() {
+    document.getElementById('formFile').value = '';
+    form.reset();
+}
 
 /**
  * ファイルを読み込んでArrayBufferとして返します。
@@ -71,9 +87,10 @@ function onFileSelected(event) {
 
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
             <div class="pb-4">
-                <form class="row" @submit.prevent="form.post(route('books.store'), { onSuccess: () => form.reset() })">
+                <form class="row" @submit.prevent="form.post(route('books.store'), { onSuccess: formReset })">
                     <div class="col-6">
-                        <input class="form-control" :class="{ 'is-invalid' : form.errors.file }" type="file" id="formFile"
+                        <input class="form-control" type="file" id="formFile"
+                               :class="{ 'is-invalid' : form.errors.file }"
                                @change="onFileSelected">
                         <InputError :message="form.errors.file"/>
                     </div>
@@ -94,8 +111,14 @@ function onFileSelected(event) {
                 <tbody>
                 <tr v-for="(book, index) in books">
                     <td class="text-center">{{ book.id }}</td>
-                    <td>{{ book.filename }}</td>
-                    <td></td>
+                    <td data-bs-toggle="tooltip" data-bs-title="削除">{{ book.filename }}</td>
+                    <td class="text-xl">
+                        <i class="bi bi-pencil-square text-success"/>
+                        <Link as="button" :href="route('books.destroy', book.id)" method="delete"
+                              class="pl-2 pr-2 control-btn rounded-lg" >
+                            <i class="bi bi-trash3-fill text-danger" data-bs-toggle="tooltip" title="削除" />
+                        </Link>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -110,5 +133,7 @@ export default {
 </script>
 
 <style scoped>
-
+.control-btn:hover {
+    background-color: #e2f0ec;
+}
 </style>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -32,7 +34,7 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) :RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'filename' => 'required|string|max:255',
@@ -74,8 +76,15 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Book $book)
+    public function destroy(Book $book): RedirectResponse
     {
-        //
+        Gate::authorize('delete', $book);
+
+        // ファイルの実体を削除。削除出来たら、DBレコードも削除
+        if (Storage::delete($book->filepath)) {
+            $book->delete();
+        }
+
+        return redirect(route('books.index'));
     }
 }

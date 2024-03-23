@@ -33,7 +33,7 @@ Route::resource('chirps', ChirpController::class)
 
 // 電子帳簿
 Route::resource('books', BookController::class)
-    ->only(['index', 'store'])
+    ->only(['index', 'store', 'destroy'])
     ->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
