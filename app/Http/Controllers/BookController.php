@@ -42,7 +42,7 @@ class BookController extends Controller
         ]);
 
         // ファイルをストレージに保存
-        $validated['filepath'] = $request->file->store('books/' . $request->user()->id);
+        $validated['filepath'] = $request->file->store('books/' . $request->user()->id, 'public');
         // DBに情報を保存
         $request->user()->books()->create($validated);
 

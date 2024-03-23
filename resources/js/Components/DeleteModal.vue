@@ -9,7 +9,7 @@ defineProps(['modal']);
     <Modal v-model="modal.show" title="削除を実行します">
         <slot />
 
-        <button type="button" class="btn btn-outline-dark justify-between" @click="modal.show = false">
+        <button type="button" class="btn btn-outline-secondary justify-between" @click="modal.show = false">
             やめる
         </button>
         <Link as="button" :href="route('books.destroy', modal.targetId)" method="delete"

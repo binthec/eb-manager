@@ -5,9 +5,16 @@ import {Head, useForm} from "@inertiajs/vue3";
 import {reactive, ref} from "vue";
 
 import DeleteModal from "@/Components/DeleteModal.vue";
+import ViewModal from "@/Components/ViewModal.vue";
+
 const delModal = ref({
     show: false,
     targetId: null,
+});
+
+const viewModal = ref({
+    show: false,
+    book: {},
 });
 
 defineProps(['books']);
@@ -111,11 +118,15 @@ function onFileSelected(event) {
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(book, index) in books">
+                <tr v-for="(book) in books">
                     <td class="text-center">{{ book.id }}</td>
                     <td data-bs-toggle="tooltip" data-bs-title="削除">{{ book.filename }}</td>
                     <td class="text-xl">
-                        <i class="bi bi-pencil-square text-success"/>
+                        <span class="pl-2 pr-2 control-btn rounded-lg"
+                              @click="viewModal.show = true; viewModal.book = book">
+                            <i class="bi bi-file-earmark-image text-success"/>
+                        </span>
+
                         <span class="pl-2 pr-2 control-btn rounded-lg"
                               @click="delModal.show = true; delModal.targetId = book.id">
                             <i class="bi bi-trash3-fill text-danger"/>
@@ -126,6 +137,10 @@ function onFileSelected(event) {
             </table>
         </div>
     </AuthenticatedLayout>
+
+    <ViewModal :modal="viewModal" :filename="viewModal.book.filename">
+        <img :src="'storage/' + viewModal.book.filepath" />
+    </ViewModal>
 
     <DeleteModal :modal="delModal">
         <p>
