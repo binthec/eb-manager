@@ -48,8 +48,8 @@ function formReset() {
  * ファイルが選択されたら確認画面を表示する
  * @param event
  */
-function onFileSelected(event) {
-    let selected_file = event.target.files[0];
+function onFileSelected(e) {
+    let selected_file = e.target.files[0];
 
     // Modal 用のデータ
     uploadModal.obj_url = URL.createObjectURL(selected_file);
