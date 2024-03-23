@@ -11,7 +11,8 @@ class Book extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'title',
+        'filename',
         'filepath'
     ];
 

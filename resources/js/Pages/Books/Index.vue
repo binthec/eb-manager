@@ -13,7 +13,7 @@ const selected_file = reactive({
 });
 
 const form = useForm({
-    name: '',
+    filename: '',
     file: null
 })
 
@@ -42,27 +42,22 @@ function fileToArrayBufferAsync(file) {
 };
 
 function onFileSelected(event) {
-    console.log('event : ');
-    console.log(event);
 
-    selectFile(event.target.files[0]);
-}
+    let selected_file = event.target.files[0];
 
-function selectFile(file) {
+    console.log('selected_file : ');
+    console.log(selected_file);
 
-    console.log('file : ');
-    console.log(file);
-
-    fileToArrayBufferAsync(file)
+    fileToArrayBufferAsync(selected_file)
         .then((buffer) => {
             console.log('buffer : ');
             console.log(buffer);
 
-            selected_file.name = file;
-            selected_file.data_url = URL.createObjectURL(file);
+            // selected_file.name = file;
+            // selected_file.data_url = URL.createObjectURL(selected_file);
 
-            form.name = file.name;
-            form.file = file;
+            form.filename = selected_file.name;
+            form.file = selected_file;
         });
 }
 </script>
@@ -75,35 +70,29 @@ function selectFile(file) {
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Electronic Books　電子帳簿</h2>
         </template>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">電子帳簿一覧</div>
+        <div class="p-4 bg-white overflow-hidden shadow-sm sm:rounded-lg mb-4 sm:mb-6 lg:mb-8">
+            <form @submit.prevent="form.post(route('books.store'), { onSuccess: () => form.reset() })">
+                <label for="formFile" class="form-label">ファイルを選択してください</label>
+                <input class="form-control" type="file" id="formFile" @change="onFileSelected">
+                <PrimaryButton class="mt-4 float-end">submit</PrimaryButton>
+            </form>
+        </div>
 
-                    <form @submit.prevent="form.post(route('books.store'), { onSuccess: () => form.reset() })">
-                        <input type="file" name="upload_file" @change="onFileSelected"/>
-                        <PrimaryButton class="mt-4">submit</PrimaryButton>
-                    </form>
-                </div>
-
-                <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>id</th>
-                            <th>name</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="(book, index) in books">
-                            <td>{{ book.id }}</td>
-                            <td>{{ book.name }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
+        <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(book, index) in books">
+                    <td>{{ book.id }}</td>
+                    <td>{{ book.filename }}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </AuthenticatedLayout>
 </template>

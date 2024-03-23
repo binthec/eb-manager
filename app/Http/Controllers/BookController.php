@@ -35,7 +35,7 @@ class BookController extends Controller
     public function store(Request $request) :RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'filename' => 'required',
         ]);
 
         // ファイルをストレージに保存
