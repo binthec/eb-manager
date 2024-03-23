@@ -2,11 +2,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import {Head, useForm} from "@inertiajs/vue3";
-import {reactive} from "vue";
-import {Link} from "@inertiajs/vue3";
+import {reactive, ref} from "vue";
 
-const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+import DeleteModal from "@/Components/DeleteModal.vue";
+const delModal = ref({
+    show: false,
+    targetId: null,
+});
 
 defineProps(['books']);
 
@@ -114,16 +116,23 @@ function onFileSelected(event) {
                     <td data-bs-toggle="tooltip" data-bs-title="削除">{{ book.filename }}</td>
                     <td class="text-xl">
                         <i class="bi bi-pencil-square text-success"/>
-                        <Link as="button" :href="route('books.destroy', book.id)" method="delete"
-                              class="pl-2 pr-2 control-btn rounded-lg" >
-                            <i class="bi bi-trash3-fill text-danger" data-bs-toggle="tooltip" title="削除" />
-                        </Link>
+                        <span class="pl-2 pr-2 control-btn rounded-lg"
+                              @click="delModal.show = true; delModal.targetId = book.id">
+                            <i class="bi bi-trash3-fill text-danger"/>
+                        </span>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </AuthenticatedLayout>
+
+    <DeleteModal :modal="delModal">
+        <p>
+            画像ID : {{ delModal.targetId }} を削除します。よろしいですか。<br>
+            <span class="text-danger">※この処理は取り消せません。</span>
+        </p>
+    </DeleteModal>
 </template>
 
 <script>

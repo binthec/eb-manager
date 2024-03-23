@@ -18,6 +18,7 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "@kouts/vue-modal": "^5.0.0",
         "bootstrap": "^5.3.0",
         "bootstrap-icons": "^1.11.3",
         "dayjs": "^1.11.10"
