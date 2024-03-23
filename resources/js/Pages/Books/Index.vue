@@ -1,7 +1,6 @@
 <script setup xmlns="http://www.w3.org/1999/html">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import {Head, useForm} from "@inertiajs/vue3";
 import {reactive} from "vue";
 
@@ -74,10 +73,12 @@ function onFileSelected(event) {
             <div class="pb-4">
                 <form class="row" @submit.prevent="form.post(route('books.store'), { onSuccess: () => form.reset() })">
                     <div class="col-6">
-                        <input class="form-control" type="file" id="formFile" @change="onFileSelected">
+                        <input class="form-control" :class="{ 'is-invalid' : form.errors.file }" type="file" id="formFile"
+                               @change="onFileSelected">
+                        <InputError :message="form.errors.file"/>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-success">submit</button>
+                        <button class="btn btn-success">登録</button>
                     </div>
                 </form>
             </div>
