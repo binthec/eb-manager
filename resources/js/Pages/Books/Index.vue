@@ -3,7 +3,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import {Head, useForm} from "@inertiajs/vue3";
 import {reactive, ref} from "vue";
+import {Link} from "@inertiajs/vue3";
 
+import {Modal} from "@kouts/vue-modal";
 import DeleteModal from "@/Components/DeleteModal.vue";
 import ViewModal from "@/Components/ViewModal.vue";
 
@@ -17,12 +19,12 @@ const viewModal = ref({
     book: {},
 });
 
-defineProps(['books']);
-
-const selected_file = reactive({
-    name: '',
-    data_url: ''
+const uploadModal = reactive({
+    show: false,
+    obj_url: '',
 });
+
+defineProps(['books']);
 
 /**
  * 送信用の値
@@ -39,50 +41,23 @@ const form = useForm({
 function formReset() {
     document.getElementById('formFile').value = '';
     form.reset();
+    uploadModal.show = false;
 }
 
 /**
- * ファイルを読み込んでArrayBufferとして返します。
- *
- * @param {Blob} file
- * @returns {Promise<Uint8Array>}
+ * ファイルが選択されたら確認画面を表示する
+ * @param event
  */
-function fileToArrayBufferAsync(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.addEventListener("load", (event) => {
-            resolve(new Uint8Array(reader.result));
-        });
-        reader.addEventListener("abort", (event) => {
-            reject();
-        });
-        reader.addEventListener("error", (event) => {
-            reject();
-        });
-
-        reader.readAsArrayBuffer(file);
-    });
-};
-
 function onFileSelected(event) {
-
     let selected_file = event.target.files[0];
 
-    console.log('selected_file : ');
-    console.log(selected_file);
+    // Modal 用のデータ
+    uploadModal.obj_url = URL.createObjectURL(selected_file);
+    uploadModal.show = true;
 
-    fileToArrayBufferAsync(selected_file)
-        .then((buffer) => {
-            console.log('buffer : ');
-            console.log(buffer);
-
-            // selected_file.name = file;
-            // selected_file.data_url = URL.createObjectURL(selected_file);
-
-            form.filename = selected_file.name;
-            form.file = selected_file;
-        });
+    // 送信用データ
+    form.filename = selected_file.name;
+    form.file = selected_file;
 }
 </script>
 
@@ -95,19 +70,11 @@ function onFileSelected(event) {
         </template>
 
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
-            <div class="pb-4">
-                <form class="row" @submit.prevent="form.post(route('books.store'), { onSuccess: formReset })">
-                    <div class="col-6">
-                        <input class="form-control" type="file" id="formFile"
-                               :class="{ 'is-invalid' : form.errors.file }"
-                               @change="onFileSelected">
-                        <InputError :message="form.errors.file"/>
-                    </div>
-                    <div class="col-auto">
-                        <button class="btn btn-success">登録</button>
-                    </div>
-                </form>
-            </div>
+            <form class="pb-4">
+                <input class="form-control" type="file" id="formFile" :class="{ 'is-invalid' : form.errors.file }"
+                       @change="onFileSelected">
+                <InputError :message="form.errors.file"/>
+            </form>
 
             <table class="table table-bordered">
                 <thead>
@@ -138,8 +105,21 @@ function onFileSelected(event) {
         </div>
     </AuthenticatedLayout>
 
+    <Modal v-model="uploadModal.show" title="以下の内容で登録します">
+        <div class="pt-4 pb-4">
+            <img :src="uploadModal.obj_url"/>
+        </div>
+        <button type="button" class="btn btn-outline-secondary justify-between" @click="uploadModal.show = false">
+            やめる
+        </button>
+        <button type="button" class="btn btn-success ml-4 float-end"
+                @click="form.post(route('books.store'), { onSuccess: formReset })">
+            登録実行
+        </button>
+    </Modal>
+
     <ViewModal :modal="viewModal" :filename="viewModal.book.filename">
-        <img :src="'storage/' + viewModal.book.filepath" />
+        <img :src="'storage/' + viewModal.book.filepath"/>
     </ViewModal>
 
     <DeleteModal :modal="delModal">
