@@ -118,9 +118,7 @@ function onFileSelected(e) {
         </button>
     </Modal>
 
-    <ViewModal :modal="viewModal" :filename="viewModal.book.filename">
-        <img :src="'storage/' + viewModal.book.filepath"/>
-    </ViewModal>
+    <ViewModal :modal="viewModal" :book="viewModal.book"></ViewModal>
 
     <DeleteModal :modal="delModal">
         <p>
