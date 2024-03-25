@@ -9,12 +9,12 @@ import {Modal} from "@kouts/vue-modal";
 import DeleteModal from "@/Components/DeleteModal.vue";
 import ViewModal from "@/Components/ViewModal.vue";
 
-const delModal = ref({
+const viewModal = ref({
     show: false,
-    targetId: null,
+    book: {},
 });
 
-const viewModal = ref({
+const delModal = ref({
     show: false,
     book: {},
 });
@@ -82,8 +82,8 @@ function onFileSelected(e) {
     </AuthenticatedLayout>
 
     <Modal v-model="uploadModal.show" title="以下の内容で登録します">
-        <div class="pt-4 pb-4">
-            <img :src="uploadModal.obj_url"/>
+        <div class="pt-4 pb-4 d-flex justify-content-center">
+            <img :src="uploadModal.obj_url" class="selected-img"/>
         </div>
         <button type="button" class="btn btn-outline-secondary justify-between" @click="uploadModal.show = false">
             やめる
@@ -94,14 +94,8 @@ function onFileSelected(e) {
         </button>
     </Modal>
 
-    <ViewModal :modal="viewModal" :book="viewModal.book"></ViewModal>
-
-    <DeleteModal :modal="delModal">
-        <p>
-            画像ID : {{ delModal.targetId }} を削除します。よろしいですか。<br>
-            <span class="text-danger">※この処理は取り消せません。</span>
-        </p>
-    </DeleteModal>
+    <ViewModal :modal="viewModal"></ViewModal>
+    <DeleteModal :modal="delModal"></DeleteModal>
 </template>
 
 <script>
@@ -111,7 +105,7 @@ export default {
 </script>
 
 <style scoped>
-.control-btn:hover {
-    background-color: #e2f0ec;
+.selected-img {
+    max-height: 500px;
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup>
 import {Modal} from "@kouts/vue-modal";
 import dayjs from "dayjs";
-defineProps(['modal', 'book']);
+defineProps(['modal']);
 </script>
 
 <template>
@@ -10,9 +10,8 @@ defineProps(['modal', 'book']);
             <div class="row">
                 <div class="col-6">
                     <div class="mb-4">
-                        <img :src="'storage/' + book.filepath"/>
+                        <img :src="'storage/' + modal.book.filepath"/>
                     </div>
-
                 </div>
                 <div class="col-6">
                     電子保存情報
@@ -39,7 +38,7 @@ defineProps(['modal', 'book']);
                         <tbody>
                         <tr>
                             <td>アップロード日</td>
-                            <td>{{ dayjs(book.created_at).format('YYYY/MM/DD') }}</td>
+                            <td>{{ dayjs(modal.book.created_at).format('YYYY/MM/DD') }}</td>
                         </tr>
                         <tr>
                             <td>総画素数</td>
