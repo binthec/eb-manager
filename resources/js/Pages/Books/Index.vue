@@ -83,7 +83,7 @@ function onFileSelected(e) {
 
     <Modal v-model="uploadModal.show" title="以下の内容で登録します">
         <div class="pt-4 pb-4 d-flex justify-content-center">
-            <img :src="uploadModal.obj_url" class="selected-img"/>
+            <img :src="uploadModal.obj_url" class="mh-500"/>
         </div>
         <button type="button" class="btn btn-outline-secondary justify-between" @click="uploadModal.show = false">
             やめる
@@ -105,7 +105,5 @@ export default {
 </script>
 
 <style scoped>
-.selected-img {
-    max-height: 500px;
-}
+
 </style>

@@ -9,8 +9,8 @@ defineProps(['modal']);
         <Modal v-model="modal.show" :title="modal.book.filename" :modal-class="'modal-xl'">
             <div class="row">
                 <div class="col-6">
-                    <div class="mb-4">
-                        <img :src="'storage/' + modal.book.filepath"/>
+                    <div class="mb-4 d-flex justify-content-center">
+                        <img :src="'storage/' + modal.book.filepath" class="mh-500"/>
                     </div>
                 </div>
                 <div class="col-6">

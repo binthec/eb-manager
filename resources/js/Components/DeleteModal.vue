@@ -7,12 +7,13 @@ defineProps(['modal']);
 
 <template>
     <Modal v-model="modal.show" title="削除を実行します">
+        <p class="bg-warning p-2">【{{ modal.book.id }}】{{ modal.book.filename }}</p>
         <p>
-            {{ modal.book.filename }} を削除します。よろしいですか。<br>
+            削除します。よろしいですか。<br/>
             <span class="text-danger font-semibold">※この処理は取り消せません。</span>
         </p>
         <div class="d-flex justify-content-center">
-            <img :src="'storage/' + modal.book.filepath"/>
+            <img :src="'storage/' + modal.book.filepath" class="mh-500"/>
         </div>
 
         <div class="mt-4">
@@ -34,7 +35,5 @@ export default {
 </script>
 
 <style scoped>
-img {
-    max-height: 500px;
-}
+
 </style>
