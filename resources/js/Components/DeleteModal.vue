@@ -7,9 +7,9 @@ defineProps(['modal']);
 
 <template>
     <Modal v-model="modal.show" title="削除を実行します">
-        <p class="bg-warning p-2">【{{ modal.book.id }}】{{ modal.book.filename }}</p>
+        <p class="bg-warning p-2">【ID:{{ modal.book.id }}】{{ modal.book.filename }}</p>
         <p>
-            削除します。よろしいですか。<br/>
+            削除します。よろしいですか。
             <span class="text-danger font-semibold">※この処理は取り消せません。</span>
         </p>
         <div class="d-flex justify-content-center">
