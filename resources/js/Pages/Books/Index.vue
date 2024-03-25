@@ -50,10 +50,17 @@ function formReset() {
  */
 function onFileSelected(e) {
     let selected_file = e.target.files[0];
+    uploadModal.obj_url = null;
 
-    // Modal 用のデータ
-    uploadModal.obj_url = URL.createObjectURL(selected_file);
-    uploadModal.show = true;
+    if (selected_file.type === 'application/pdf') {
+        console.log('It is PDF!');
+    } else {
+        console.log('It is JPG or PNG.');
+        // アップロードモーダル表示用画像
+        uploadModal.obj_url = URL.createObjectURL(selected_file);
+    }
+
+    uploadModal.show = true; // アップロードモーダル表示
 
     // 送信用データ
     form.filename = selected_file.name;
@@ -71,8 +78,10 @@ function onFileSelected(e) {
 
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
             <form class="pb-4">
-                <input class="form-control" type="file" id="formFile" :class="{ 'is-invalid' : form.errors.file }"
-                       @change="onFileSelected">
+                <input class="form-control" type="file" id="formFile"
+                       :class="{ 'is-invalid' : form.errors.file }"
+                       :accept="'.png,.jpg,.jpeg,.pdf'"
+                       @change="onFileSelected"/>
                 <InputError :message="form.errors.file"/>
             </form>
 
