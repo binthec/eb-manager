@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import {Head, useForm} from "@inertiajs/vue3";
 import {reactive, ref} from "vue";
-import {Link} from "@inertiajs/vue3";
+import List from "@/Components/Books/List.vue";
 
 import {Modal} from "@kouts/vue-modal";
 import DeleteModal from "@/Components/DeleteModal.vue";
@@ -77,33 +77,7 @@ function onFileSelected(e) {
                        @change="onFileSelected"/>
                 <InputError :message="form.errors.file"/>
             </form>
-
-            <table class="table table-bordered">
-                <thead>
-                <tr class="text-center table-success">
-                    <th>id</th>
-                    <th>ファイル名</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(book) in books">
-                    <td class="text-center">{{ book.id }}</td>
-                    <td data-bs-toggle="tooltip" data-bs-title="削除">{{ book.filename }}</td>
-                    <td class="text-xl">
-                        <span class="pl-2 pr-2 control-btn rounded-lg"
-                              @click="viewModal.show = true; viewModal.book = book">
-                            <i class="bi bi-file-earmark-image text-success"/>
-                        </span>
-
-                        <span class="pl-2 pr-2 control-btn rounded-lg"
-                              @click="delModal.show = true; delModal.targetId = book.id">
-                            <i class="bi bi-trash3-fill text-danger"/>
-                        </span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <List :view-modal="viewModal" :del-modal="delModal" :books="books"></List>
         </div>
     </AuthenticatedLayout>
 
