@@ -73,7 +73,7 @@ function onFileSelected(e) {
             <form class="pb-4">
                 <input class="form-control" type="file" id="formFile"
                        :class="{ 'is-invalid' : form.errors.file }"
-                       :accept="'.png,.jpg,.jpeg,.pdf'"
+                       :accept="'.png,.jpg,.jpeg'"
                        @change="onFileSelected"/>
                 <InputError :message="form.errors.file"/>
             </form>
