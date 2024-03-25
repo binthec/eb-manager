@@ -7,7 +7,7 @@ defineProps(['viewModal', 'delModal', 'books'])
     <div class="row row-cols-4 border-top-0">
         <div class="col mb-3" v-for="(book) in books">
             <div class="card h-100">
-                <img :src="'storage/' + book.filepath" class="align-self-center"/>
+                <img :src="'storage/' + book.filepath" class="align-self-center" loading="lazy"/>
                 <div class="card-body bg-light">
                     【{{ book.id }}】{{ book.filename }}<br/>
                     <span class="text-sm text-secondary">{{ dayjs(book.created_at).format('YYYY/MM/DD') }}</span>
