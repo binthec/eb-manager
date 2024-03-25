@@ -46,21 +46,14 @@ function formReset() {
 
 /**
  * ファイルが選択されたら確認画面を表示する
- * @param event
+ * @param e
  */
 function onFileSelected(e) {
     let selected_file = e.target.files[0];
-    uploadModal.obj_url = null;
 
-    if (selected_file.type === 'application/pdf') {
-        console.log('It is PDF!');
-    } else {
-        console.log('It is JPG or PNG.');
-        // アップロードモーダル表示用画像
-        uploadModal.obj_url = URL.createObjectURL(selected_file);
-    }
-
-    uploadModal.show = true; // アップロードモーダル表示
+    // アップロードモーダル表示用画像
+    uploadModal.obj_url = URL.createObjectURL(selected_file);
+    uploadModal.show = true;
 
     // 送信用データ
     form.filename = selected_file.name;
