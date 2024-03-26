@@ -5,9 +5,14 @@ import {Head, useForm} from "@inertiajs/vue3";
 import {reactive, ref} from "vue";
 import List from "@/Components/Books/List.vue";
 
+//exifデータ読み込み用
+import loadImage from "blueimp-load-image"
+
+// modal
 import {Modal} from "@kouts/vue-modal";
 import DeleteModal from "@/Components/DeleteModal.vue";
 import ViewModal from "@/Components/ViewModal.vue";
+import dayjs from "dayjs";
 
 const viewModal = ref({
     show: false,
@@ -31,8 +36,16 @@ defineProps(['books']);
  * @type {InertiaForm<{filename: string, file: null}>}
  */
 const form = useForm({
+    file: null,
     filename: '',
-    file: null
+    size: 0,
+    lastModified: null,
+
+    // exif情報
+    PixelXDimension: 0,
+    PixelYDimension: 0,
+    XResolution: 0,
+    YResolution: 0,
 })
 
 /**
@@ -51,13 +64,37 @@ function formReset() {
 function onFileSelected(e) {
     let selected_file = e.target.files[0];
 
-    // アップロードモーダル表示用画像
-    uploadModal.obj_url = URL.createObjectURL(selected_file);
-    uploadModal.show = true;
+    if(selected_file.type === 'application/pdf'){
+        // TODO:PDFの際の処理
+    }else{
 
+        loadImage.parseMetaData(selected_file, (data) => {
+            let exif = data.exif && data.exif.getAll();
+            setFormData(selected_file, exif);
+
+            // アップロードモーダル表示用画像
+            uploadModal.obj_url = URL.createObjectURL(selected_file);
+            uploadModal.show = true;
+        });
+    }
+
+
+
+}
+
+function setFormData(selected_file, exif){
     // 送信用データ
-    form.filename = selected_file.name;
     form.file = selected_file;
+    form.filename = selected_file.name;
+    form.size = selected_file.size;
+    form.lastModified = dayjs(selected_file.lastModified).format('YYYY-MM-DD HH:mm:ss');
+
+    if(exif){
+        form.XResolution = exif.XResolution;
+        form.YResolution = exif.YResolution;
+        form.PixelXDimension = exif.Exif.PixelXDimension;
+        form.PixelYDimension = exif.Exif.PixelYDimension;
+    }
 }
 </script>
 
@@ -77,7 +114,8 @@ function onFileSelected(e) {
                        @change="onFileSelected"/>
                 <InputError :message="form.errors.file"/>
             </form>
-            <List :view-modal="viewModal" :del-modal="delModal" :books="books"></List>
+            <List v-if="books.length !== 0" :view-modal="viewModal" :del-modal="delModal" :books="books"></List>
+            <div v-else class="books-empty border-top-0">ファイルを登録してください。</div>
         </div>
     </AuthenticatedLayout>
 

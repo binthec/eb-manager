@@ -13,7 +13,13 @@ class Book extends Model
     protected $fillable = [
         'title',
         'filename',
-        'filepath'
+        'filepath',
+        'size',
+        'lastModified',
+        'XResolution',
+        'YResolution',
+        'PixelXDimension',
+        'PixelYDimension',
     ];
 
     public function user(): BelongsTo

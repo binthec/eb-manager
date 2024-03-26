@@ -38,8 +38,17 @@ class BookController extends Controller
     {
         $validated = $request->validate([
             'filename' => 'required|string|max:255',
-            'file' => 'required'
+            'file' => 'required',
+            'size' => 'required|numeric',
+            'lastModified' => 'required',
+            'XResolution' => 'nullable|numeric',
+            'YResolution' => 'nullable|numeric',
+            'PixelXDimension' => 'nullable|numeric',
+            'PixelYDimension' => 'nullable|numeric',
         ]);
+
+        Log::debug('$validated');
+        Log::debug($validated);
 
         // ファイルをストレージに保存
         $validated['filepath'] = $request->file->store('books/' . $request->user()->id, 'public');
