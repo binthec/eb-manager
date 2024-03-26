@@ -40,11 +40,12 @@ class BookController extends Controller
             'filename' => 'required|string|max:255',
             'file' => 'required',
             'size' => 'required|numeric',
-            'lastModified' => 'required',
+            'width' => 'required|numeric',
+            'height' => 'required|numeric',
             'XResolution' => 'nullable|numeric',
             'YResolution' => 'nullable|numeric',
-            'PixelXDimension' => 'nullable|numeric',
-            'PixelYDimension' => 'nullable|numeric',
+            'ResolutionUnit' => 'nullable|numeric',
+            'lastModified' => 'required',
         ]);
 
         Log::debug('$validated');

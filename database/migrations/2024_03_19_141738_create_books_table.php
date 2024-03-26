@@ -16,11 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('filename');
             $table->integer('size');
-            $table->dateTime('lastModified');
+            $table->integer('width');
+            $table->integer('height');
             $table->integer('XResolution')->nullable();
             $table->integer('YResolution')->nullable();
-            $table->integer('PixelXDimension')->nullable();
-            $table->integer('PixelYDimension')->nullable();
+            $table->integer('ResolutionUnit')->nullable();
+            $table->dateTime('lastModified');
             $table->string('filepath');
             $table->timestamps();
         });

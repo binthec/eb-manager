@@ -39,13 +39,14 @@ const form = useForm({
     file: null,
     filename: '',
     size: 0,
+    width: 0,
+    height: 0,
     lastModified: null,
 
     // exif情報
-    PixelXDimension: 0,
-    PixelYDimension: 0,
-    XResolution: 0,
-    YResolution: 0,
+    ResolutionUnit: null,
+    XResolution: null,
+    YResolution: null,
 })
 
 /**
@@ -69,31 +70,36 @@ function onFileSelected(e) {
     }else{
 
         loadImage.parseMetaData(selected_file, (data) => {
+            // 画像の exif データ取得
             let exif = data.exif && data.exif.getAll();
-            setFormData(selected_file, exif);
 
             // アップロードモーダル表示用画像
             uploadModal.obj_url = URL.createObjectURL(selected_file);
-            uploadModal.show = true;
+
+            // 画像情報取得用
+            let img = new Image();
+            img.src = uploadModal.obj_url;
+            img.onload = (() => {
+                setFormData(selected_file, img, exif);
+                uploadModal.show = true;
+            })
         });
     }
-
-
-
 }
 
-function setFormData(selected_file, exif){
+function setFormData(selected_file, img, exif){
     // 送信用データ
     form.file = selected_file;
     form.filename = selected_file.name;
     form.size = selected_file.size;
+    form.width = img.naturalWidth;
+    form.height = img.naturalHeight;
     form.lastModified = dayjs(selected_file.lastModified).format('YYYY-MM-DD HH:mm:ss');
 
     if(exif){
         form.XResolution = exif.XResolution;
         form.YResolution = exif.YResolution;
-        form.PixelXDimension = exif.Exif.PixelXDimension;
-        form.PixelYDimension = exif.Exif.PixelYDimension;
+        form.ResolutionUnit = exif.ResolutionUnit;
     }
 }
 </script>

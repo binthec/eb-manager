@@ -15,11 +15,12 @@ class Book extends Model
         'filename',
         'filepath',
         'size',
+        'width',
+        'height',
         'lastModified',
+        'ResolutionUnit',
         'XResolution',
         'YResolution',
-        'PixelXDimension',
-        'PixelYDimension',
     ];
 
     public function user(): BelongsTo
