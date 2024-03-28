@@ -4,6 +4,7 @@ import InputError from '@/Components/InputError.vue';
 import {Head, useForm} from "@inertiajs/vue3";
 import {reactive, ref} from "vue";
 import List from "@/Components/Books/List.vue";
+import dayjs from "dayjs";
 
 //exifデータ読み込み用
 import loadImage from "blueimp-load-image"
@@ -12,7 +13,6 @@ import loadImage from "blueimp-load-image"
 import {Modal} from "@kouts/vue-modal";
 import DeleteModal from "@/Components/DeleteModal.vue";
 import ViewModal from "@/Components/ViewModal.vue";
-import dayjs from "dayjs";
 
 const viewModal = ref({
     show: false,
@@ -138,7 +138,7 @@ function setFormData(selected_file, img, exif){
         </button>
     </Modal>
 
-    <ViewModal :modal="viewModal"></ViewModal>
+    <ViewModal :modal="viewModal" :book="viewModal.book"></ViewModal>
     <DeleteModal :modal="delModal"></DeleteModal>
 </template>
 

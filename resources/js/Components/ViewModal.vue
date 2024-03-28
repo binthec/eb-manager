@@ -1,16 +1,16 @@
 <script setup>
 import {Modal} from "@kouts/vue-modal";
 import dayjs from "dayjs";
-defineProps(['modal']);
+defineProps(['modal', 'book']);
 </script>
 
 <template>
     <div>
-        <Modal v-model="modal.show" :title="modal.book.filename" :modal-class="'modal-xl'">
+        <Modal v-model="modal.show" :title="book.filename" :modal-class="'modal-xl'">
             <div class="row">
                 <div class="col-6">
                     <div class="mb-4 d-flex justify-content-center">
-                        <img :src="'storage/' + modal.book.filepath" class="mh-500"/>
+                        <img :src="'storage/' + book.filepath" class="mh-500"/>
                     </div>
                 </div>
                 <div class="col-6">
@@ -38,19 +38,26 @@ defineProps(['modal']);
                         <tbody>
                         <tr>
                             <td>アップロード日</td>
-                            <td>{{ dayjs(modal.book.created_at).format('YYYY/MM/DD') }}</td>
+                            <td>{{ dayjs(book.created_at).format('YYYY/MM/DD') }}</td>
+                        </tr>
+                        <tr>
+                            <td>サイズ</td>
+                            <td>{{ Math.round(book.size / 1024) }} KB</td>
                         </tr>
                         <tr>
                             <td>総画素数</td>
-                            <td></td>
+                            <td>{{ book.width }} x {{ book.height }}</td>
                         </tr>
                         <tr>
                             <td>解像度</td>
-                            <td></td>
+                            <td>
+                                <span v-if="book.XResolution">{{ book.XResolution }} dpi</span>
+                                <span v-else class="text-secondary text-sm">取得できませんでした</span>
+                            </td>
                         </tr>
                         <tr>
-                            <td>階調</td>
-                            <td></td>
+                            <td>撮影日時</td>
+                            <td>{{ dayjs(book.lastModified).format('YYYY/MM/DD HH:mm:ss') }}</td>
                         </tr>
                         </tbody>
                     </table>
