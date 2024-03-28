@@ -1,7 +1,8 @@
 <script setup>
-import dayjs from "dayjs";
+import useFormatDate from "@/Composables/FormatDate.js";
 
 defineProps(['viewModal', 'delModal', 'books'])
+const {getJADate} = useFormatDate();
 </script>
 
 <template>
@@ -15,7 +16,7 @@ defineProps(['viewModal', 'delModal', 'books'])
                 </div>
                 <div class="card-body bg-light">
                     【ID:{{ book.id }}】{{ book.filename }}<br/>
-                    <span class="text-sm text-secondary">{{ dayjs(book.created_at).format('YYYY/MM/DD') }}</span>
+                    <span class="text-sm text-secondary">{{ getJADate(book.created_at) }}</span>
                 </div>
                 <div class="card-footer text-xl bg-white d-flex justify-content-evenly">
                     <span class="pl-2 pr-2 control-btn rounded-lg"
@@ -45,7 +46,7 @@ export default {
     overflow: hidden;
 }
 
-img{
+img {
     transition: transform 0.3s;
 }
 

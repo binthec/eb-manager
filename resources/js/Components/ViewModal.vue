@@ -1,7 +1,9 @@
 <script setup>
 import {Modal} from "@kouts/vue-modal";
-import dayjs from "dayjs";
 defineProps(['modal', 'book']);
+
+import useFormatDate from "../Composables/FormatDate.js"
+const {getJADate, getJADatetime} = useFormatDate();
 </script>
 
 <template>
@@ -38,7 +40,7 @@ defineProps(['modal', 'book']);
                         <tbody>
                         <tr>
                             <td>アップロード日</td>
-                            <td>{{ dayjs(book.created_at).format('YYYY/MM/DD') }}</td>
+                            <td>{{ getJADate(book.created_at) }}</td>
                         </tr>
                         <tr>
                             <td>サイズ</td>
@@ -57,7 +59,7 @@ defineProps(['modal', 'book']);
                         </tr>
                         <tr>
                             <td>撮影日時</td>
-                            <td>{{ dayjs(book.lastModified).format('YYYY/MM/DD HH:mm:ss') }}</td>
+                            <td>{{ getJADatetime(book.lastModified) }}</td>
                         </tr>
                         </tbody>
                     </table>

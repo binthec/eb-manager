@@ -4,7 +4,7 @@ import InputError from '@/Components/InputError.vue';
 import {Head, useForm} from "@inertiajs/vue3";
 import {reactive, ref} from "vue";
 import List from "@/Components/Books/List.vue";
-import dayjs from "dayjs";
+import useFormatDate from "@/Composables/FormatDate.js";
 
 //exifデータ読み込み用
 import loadImage from "blueimp-load-image"
@@ -13,6 +13,8 @@ import loadImage from "blueimp-load-image"
 import {Modal} from "@kouts/vue-modal";
 import DeleteModal from "@/Components/DeleteModal.vue";
 import ViewModal from "@/Components/ViewModal.vue";
+
+const {getJADatetime} = useFormatDate();
 
 const viewModal = ref({
     show: false,
@@ -65,9 +67,9 @@ function formReset() {
 function onFileSelected(e) {
     let selected_file = e.target.files[0];
 
-    if(selected_file.type === 'application/pdf'){
+    if (selected_file.type === 'application/pdf') {
         // TODO:PDFの際の処理
-    }else{
+    } else {
 
         loadImage.parseMetaData(selected_file, (data) => {
             // 画像の exif データ取得
@@ -87,16 +89,16 @@ function onFileSelected(e) {
     }
 }
 
-function setFormData(selected_file, img, exif){
+function setFormData(selected_file, img, exif) {
     // 送信用データ
     form.file = selected_file;
     form.filename = selected_file.name;
     form.size = selected_file.size;
     form.width = img.naturalWidth;
     form.height = img.naturalHeight;
-    form.lastModified = dayjs(selected_file.lastModified).format('YYYY-MM-DD HH:mm:ss');
+    form.lastModified = getJADatetime(selected_file.lastModified);
 
-    if(exif){
+    if (exif) {
         form.XResolution = exif.XResolution;
         form.YResolution = exif.YResolution;
         form.ResolutionUnit = exif.ResolutionUnit;
