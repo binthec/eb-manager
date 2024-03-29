@@ -1,7 +1,7 @@
 # Electronic Books Manager
 
 ## 概要
-Laravel 11 と Vue.js 3 を使ってSPAの学習と実装をしているプロジェクト。
+Laravel 11 と Vue.js 3 を使ってSPAの学習と実装をしている個人のプロジェクト。
 Vue.js のバージョンは 3.4。Composition API を使用。
 
 
