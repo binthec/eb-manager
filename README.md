@@ -6,12 +6,12 @@ Vue.js のバージョンは 3.4。Composition API を使用。
 
 
 ## 技術要件
+
 - Laravel 11.0
 - Vue.js 3.4
 - Inertia.js
 - Vite
 - Bootstrap 5.3.0
-
 - その他細々したもの
   - vue-modal
   - day.js
