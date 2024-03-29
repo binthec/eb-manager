@@ -5,6 +5,7 @@ import {Head, useForm} from "@inertiajs/vue3";
 import {reactive, ref} from "vue";
 import List from "@/Pages/Books/Partials/List.vue";
 import useFormatDate from "@/Composables/FormatDate.js";
+import _ from "lodash";
 
 //exifデータ読み込み用
 import loadImage from "blueimp-load-image"
@@ -52,12 +53,21 @@ const form = useForm({
 })
 
 /**
- * 登録ボタン押した時の挙動
+ * 登録成功時の挙動
  */
 function formReset() {
     document.getElementById('formFile').value = '';
     form.reset();
     uploadModal.show = false;
+    form.errors = {};
+}
+
+/**
+ * 登録失敗時の挙動
+ */
+function showErrors(e) {
+    console.log(e);
+    console.log(form.errors);
 }
 
 /**
@@ -89,6 +99,12 @@ function onFileSelected(e) {
     }
 }
 
+/**
+ * フォームに値をセット
+ * @param selected_file
+ * @param img
+ * @param exif
+ */
 function setFormData(selected_file, img, exif) {
     // 送信用データ
     form.file = selected_file;
@@ -131,11 +147,22 @@ function setFormData(selected_file, img, exif) {
         <div class="pt-4 pb-4 d-flex justify-content-center">
             <img :src="uploadModal.obj_url" class="mh-500"/>
         </div>
-        <button type="button" class="btn btn-outline-secondary justify-between" @click="uploadModal.show = false">
+        <div v-if="!_.isEmpty(form.errors)" class="mb-3">
+            <span class="p-2 mb-0 bg-warning rounded"><i class="bi bi-exclamation-triangle-fill"></i> エラー</span>
+            <ul class="mt-3">
+                <li v-for="error in form.errors" class="text-danger">{{ error }}</li>
+            </ul>
+        </div>
+        <button type="button" class="btn btn-outline-secondary justify-between" @click="formReset">
             やめる
         </button>
         <button type="button" class="btn btn-success ml-4 float-end"
-                @click="form.post(route('books.store'), { onSuccess: formReset })">
+                @click="form.post(route('books.store'),{
+                                                            onSuccess: formReset,
+                                                            onError: showErrors,
+                                                            // onStart: showLoader,
+                                                            // onFinish: hideLoader,
+                })">
             登録実行
         </button>
     </Modal>
@@ -151,5 +178,7 @@ export default {
 </script>
 
 <style scoped>
-
+ul {
+    list-style: disc;
+}
 </style>
