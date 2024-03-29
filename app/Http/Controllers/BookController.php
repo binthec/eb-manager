@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookStoreRequest;
 use App\Models\Book;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,19 +35,9 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(BookStoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'filename' => 'required|string|max:255',
-            'file' => 'required',
-            'size' => 'required|numeric',
-            'width' => 'required|numeric',
-            'height' => 'required|numeric',
-            'XResolution' => 'nullable|numeric',
-            'YResolution' => 'nullable|numeric',
-            'ResolutionUnit' => 'nullable|numeric',
-            'lastModified' => 'required',
-        ]);
+        $validated = $request->validate();
 
         Log::debug('$validated');
         Log::debug($validated);

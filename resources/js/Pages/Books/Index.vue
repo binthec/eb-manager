@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import {Head, useForm} from "@inertiajs/vue3";
 import {reactive, ref} from "vue";
-import List from "@/Components/Books/List.vue";
+import List from "@/Pages/Books/Partials/List.vue";
 import useFormatDate from "@/Composables/FormatDate.js";
 
 //exifデータ読み込み用

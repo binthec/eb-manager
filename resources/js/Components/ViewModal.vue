@@ -88,7 +88,7 @@ export default {
 </style>
 
 <style scoped>
-table tbody tr td:first-child{
+table tbody tr td:first-child {
     text-align: center;
     background-color: #f7fafc;
     width: 30%;
