@@ -37,7 +37,7 @@ class BookController extends Controller
      */
     public function store(BookStoreRequest $request): RedirectResponse
     {
-        $validated = $request->validate();
+        $validated = $request->validated();
 
         Log::debug('$validated');
         Log::debug($validated);

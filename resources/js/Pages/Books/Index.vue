@@ -11,7 +11,6 @@ import _ from "lodash";
 import loadImage from "blueimp-load-image"
 
 // modal
-import {Modal} from "@kouts/vue-modal";
 import DeleteModal from "@/Components/DeleteModal.vue";
 import ViewModal from "@/Components/ViewModal.vue";
 
@@ -25,11 +24,6 @@ const viewModal = ref({
 const delModal = ref({
     show: false,
     book: {},
-});
-
-const uploadModal = reactive({
-    show: false,
-    obj_url: '',
 });
 
 defineProps(['books']);
@@ -47,9 +41,9 @@ const form = useForm({
     lastModified: null,
 
     // exif情報
-    ResolutionUnit: null,
     XResolution: null,
     YResolution: null,
+    ResolutionUnit: null,
 })
 
 /**
@@ -58,16 +52,7 @@ const form = useForm({
 function formReset() {
     document.getElementById('formFile').value = '';
     form.reset();
-    uploadModal.show = false;
     form.errors = {};
-}
-
-/**
- * 登録失敗時の挙動
- */
-function showErrors(e) {
-    console.log(e);
-    console.log(form.errors);
 }
 
 /**
@@ -80,20 +65,16 @@ function onFileSelected(e) {
     if (selected_file.type === 'application/pdf') {
         // TODO:PDFの際の処理
     } else {
-
         loadImage.parseMetaData(selected_file, (data) => {
             // 画像の exif データ取得
             let exif = data.exif && data.exif.getAll();
 
-            // アップロードモーダル表示用画像
-            uploadModal.obj_url = URL.createObjectURL(selected_file);
-
             // 画像情報取得用
             let img = new Image();
-            img.src = uploadModal.obj_url;
+            img.src = URL.createObjectURL(selected_file);
             img.onload = (() => {
                 setFormData(selected_file, img, exif);
-                uploadModal.show = true;
+                form.post(route('books.store'),{ onSuccess: formReset})
             })
         });
     }
@@ -131,42 +112,19 @@ function setFormData(selected_file, img, exif) {
         </template>
 
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
-            <form class="pb-4">
+            <form>
                 <input class="form-control" type="file" id="formFile"
-                       :class="{ 'is-invalid' : form.errors.file }"
+                       :class="{ 'is-invalid' : !_.isEmpty(form.errors) }"
                        :accept="'.png,.jpg,.jpeg'"
                        @change="onFileSelected"/>
-                <InputError :message="form.errors.file"/>
+                <div v-show="form.errors" class="mb-3">
+                    <p v-for="error in form.errors" class="text-danger mb-0">{{ error }}</p>
+                </div>
             </form>
             <List v-if="books.length !== 0" :view-modal="viewModal" :del-modal="delModal" :books="books"></List>
             <div v-else class="books-empty border-top-0">ファイルを登録してください。</div>
         </div>
     </AuthenticatedLayout>
-
-    <Modal v-model="uploadModal.show" title="以下の内容で登録します">
-        <div class="pt-4 pb-4 d-flex justify-content-center">
-            <img :src="uploadModal.obj_url" class="mh-500"/>
-        </div>
-        <div v-if="!_.isEmpty(form.errors)" class="mb-3">
-            <span class="p-2 mb-0 bg-warning rounded"><i class="bi bi-exclamation-triangle-fill"></i> エラー</span>
-            <ul class="mt-3">
-                <li v-for="error in form.errors" class="text-danger">{{ error }}</li>
-            </ul>
-        </div>
-        <button type="button" class="btn btn-outline-secondary justify-between" @click="formReset">
-            やめる
-        </button>
-        <button type="button" class="btn btn-success ml-4 float-end"
-                @click="form.post(route('books.store'),{
-                                                            onSuccess: formReset,
-                                                            onError: showErrors,
-                                                            // onStart: showLoader,
-                                                            // onFinish: hideLoader,
-                })">
-            登録実行
-        </button>
-    </Modal>
-
     <ViewModal :modal="viewModal" :book="viewModal.book"></ViewModal>
     <DeleteModal :modal="delModal"></DeleteModal>
 </template>
@@ -179,6 +137,6 @@ export default {
 
 <style scoped>
 ul {
-    list-style: disc;
+    /*list-style: disc;*/
 }
 </style>
