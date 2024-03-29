@@ -2,7 +2,7 @@
 
 - Laravel 11.0
 - Vue.js 3.4
-- Inertia.ks
+- Inertia.js
 - Vite
 - Bootstrap 5.3.0
 
