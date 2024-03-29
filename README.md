@@ -1,5 +1,11 @@
-## Electronic Books Manager
+# Electronic Books Manager
 
+## 概要
+Laravel 11 と Vue.js 3 を使ってSPAの学習と実装をしているプロジェクト。
+Vue.js のバージョンは 3.4。Composition API を使用。
+
+
+## 技術要件
 - Laravel 11.0
 - Vue.js 3.4
 - Inertia.js
@@ -10,6 +16,7 @@
   - vue-modal
   - day.js
   - lodash.js
+  - blueimp-load-image
 
 ## Todo
 
