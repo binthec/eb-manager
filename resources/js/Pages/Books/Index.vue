@@ -47,7 +47,7 @@ const form = useForm({
 })
 
 /**
- * 登録成功時の挙動
+ * フォームを初期化
  */
 function formReset() {
     document.getElementById('formFile').value = '';
