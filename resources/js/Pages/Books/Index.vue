@@ -74,7 +74,7 @@ function onFileSelected(e) {
             img.src = URL.createObjectURL(selected_file);
             img.onload = (() => {
                 setFormData(selected_file, img, exif);
-                form.post(route('books.store'),{ onSuccess: formReset})
+                form.post(route('books.store'), {onSuccess: formReset})
             })
         });
     }
@@ -121,12 +121,12 @@ function setFormData(selected_file, img, exif) {
                     <p v-for="error in form.errors" class="text-danger mb-0">{{ error }}</p>
                 </div>
             </form>
-            <List v-if="books.length !== 0" :view-modal="viewModal" :del-modal="delModal" :books="books"></List>
+            <List v-if="books.length !== 0" :view-modal="viewModal" :del-modal="delModal" :books="books"/>
             <div v-else class="books-empty border-top-0">ファイルを登録してください。</div>
         </div>
     </AuthenticatedLayout>
-    <ViewModal :modal="viewModal" :book="viewModal.book"></ViewModal>
-    <DeleteModal :modal="delModal"></DeleteModal>
+    <ViewModal :modal="viewModal" :book="viewModal.book"/>
+    <DeleteModal :modal="delModal"/>
 </template>
 
 <script>
