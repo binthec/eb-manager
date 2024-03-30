@@ -4,21 +4,20 @@ import {useForm} from "@inertiajs/vue3";
 import {computed, inject} from "vue";
 
 const form = useForm({});
-
-const delModal = inject('delModal');
+const modal = inject('delModal');
 const book = computed(() => modal.book);
-const modal = computed(() => delModal.value);
+
 /**
- * フォームの実行処理
+ * フォームを submit して削除を実行
  * @param id
  */
 function submit(id) {
-    form.delete(route('books.destroy', id), {onSuccess: () => modal.show.value = false});
+    form.delete(route('books.destroy', id), {onSuccess: () => modal.show = false});
 }
 </script>
 
 <template>
-    <Modal v-model="delModal.show" title="削除を実行します">
+    <Modal v-model="modal.show" title="削除を実行します">
         <p class="bg-warning p-2">【ID:{{ book.id }}】{{ book.filename }}</p>
         <p>
             削除します。よろしいですか。

@@ -19,6 +19,10 @@ const delModal = reactive({
     book: {}
 });
 
+/**
+ * 削除モーダルは削除後に値をscript内で変更する必要があるため provide して
+ * 親の値と双方向にやりとり出来るようにする
+ */
 provide('delModal', delModal);
 </script>
 
