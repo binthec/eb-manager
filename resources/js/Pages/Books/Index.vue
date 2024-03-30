@@ -5,18 +5,6 @@ import _ from "lodash";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import UploadForm from "@/Pages/Books/Partials/UploadForm.vue";
 import List from "@/Pages/Books/Partials/List.vue";
-import ViewModal from "@/Components/ViewModal.vue";
-import DeleteModal from "@/Components/DeleteModal.vue";
-
-const viewModal = reactive({
-    show: false,
-    book: {},
-});
-
-const delModal = reactive({
-    show: false,
-    book: {},
-});
 
 defineProps(['books']);
 </script>
@@ -29,12 +17,10 @@ defineProps(['books']);
         </template>
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
             <UploadForm/>
-            <List v-if="!_.isEmpty(books)" :view-modal="viewModal" :del-modal="delModal" :books="books"/>
+            <List v-if="!_.isEmpty(books)" :books="books"/>
             <div v-else class="books-empty border-top-0"> ファイルを登録してください。</div>
         </div>
     </AuthenticatedLayout>
-    <ViewModal :modal="viewModal"/>
-    <DeleteModal :modal="delModal"/>
 </template>
 
 <script>

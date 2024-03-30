@@ -1,5 +1,5 @@
 <script setup>
-import {computed} from "vue";
+import {computed, inject} from "vue";
 import {Modal} from "@kouts/vue-modal";
 import useFormatDate from "../Composables/FormatDate.js"
 

@@ -1,8 +1,23 @@
 <script setup>
+import {reactive} from "vue";
 import useFormatDate from "@/Composables/FormatDate.js";
 
-defineProps(['viewModal', 'delModal', 'books'])
+// コンポーネント
+import ViewModal from "@/Components/ViewModal.vue";
+import DeleteModal from "@/Components/DeleteModal.vue";
+
+defineProps(['books']);
 const {getJADate} = useFormatDate();
+
+const viewModal = reactive({
+    show: false,
+    book: {}
+});
+
+const delModal = reactive({
+    show: false,
+    book: {}
+});
 </script>
 
 <template>
@@ -11,7 +26,7 @@ const {getJADate} = useFormatDate();
             <div class="card h-100">
                 <div class="img-box">
                     <img :src="'storage/' + book.filepath" class="align-self-center" loading="lazy"
-                         @click="viewModal.show = true; viewModal.book = book"/>
+                         @click="viewModalShow = true"/>
                 </div>
                 <div class="card-body bg-light">
                     【ID:{{ book.id }}】{{ book.filename }}<br/>
@@ -30,6 +45,8 @@ const {getJADate} = useFormatDate();
             </div>
         </div>
     </div>
+    <ViewModal :modal="viewModal"/>
+    <DeleteModal :modal="delModal"/>
 </template>
 
 <script>

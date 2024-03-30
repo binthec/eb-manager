@@ -79,6 +79,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book): RedirectResponse
     {
+        sleep(2);
+
         Gate::authorize('delete', $book);
 
         // ファイルの実体を削除。削除出来たら、DBレコードも削除
