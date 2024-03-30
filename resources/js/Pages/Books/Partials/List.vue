@@ -1,5 +1,5 @@
 <script setup>
-import {reactive} from "vue";
+import {provide, reactive} from "vue";
 import useFormatDate from "@/Composables/FormatDate.js";
 
 // コンポーネント
@@ -18,6 +18,8 @@ const delModal = reactive({
     show: false,
     book: {}
 });
+
+provide('delModal', delModal);
 </script>
 
 <template>
@@ -26,7 +28,7 @@ const delModal = reactive({
             <div class="card h-100">
                 <div class="img-box">
                     <img :src="'storage/' + book.filepath" class="align-self-center" loading="lazy"
-                         @click="viewModalShow = true"/>
+                         @click="viewModal.show = true"/>
                 </div>
                 <div class="card-body bg-light">
                     【ID:{{ book.id }}】{{ book.filename }}<br/>
@@ -46,7 +48,7 @@ const delModal = reactive({
         </div>
     </div>
     <ViewModal :modal="viewModal"/>
-    <DeleteModal :modal="delModal"/>
+    <DeleteModal/>
 </template>
 
 <script>
