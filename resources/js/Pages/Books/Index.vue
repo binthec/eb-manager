@@ -154,7 +154,9 @@ function setFormData(file, img, exif) {
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
             <div class="drop-area" @drop="dropHandler" @dragover="dragOverHandler" @dragleave="onDragOver = false">
                 <div v-if="onDragOver === true" class="row m-0 border-0 text-center">
-                    <div class="col-6"><i class="bi bi-cloud-upload-fill"/></div>
+                    <div class="col-6">
+                        <div class="fuwa"><i class="bi bi-cloud-upload-fill"/></div>
+                    </div>
                     <div class="col-6 d-flex align-items-center">
                         <p class="mb-0 text-secondary">ドロップするとファイルをアップロードします</p>
                     </div>
@@ -179,7 +181,7 @@ function setFormData(file, img, exif) {
             <div v-show="form.errors" class="mb-3 border-0">
                 <p v-for="error in form.errors" class="text-danger mb-0">{{ error }}</p>
             </div>
-            <List v-if="books.length !== 0" :view-modal="viewModal" :del-modal="delModal" :books="books"/>
+            <List v-if="!_.isEmpty(books)" :view-modal="viewModal" :del-modal="delModal" :books="books"/>
             <div v-else class="books-empty border-top-0">ファイルを登録してください。</div>
         </div>
     </AuthenticatedLayout>
@@ -202,6 +204,22 @@ export default {
     i {
         font-size: 100px;
         color: #c9c9c9;
+    }
+
+    .fuwa {
+        animation: fuwa 2s infinite;
+    }
+
+    @keyframes fuwa {
+        0% {
+            transform: translateY(25px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+        100% {
+            transform: translateY(25px);
+        }
     }
 }
 </style>
