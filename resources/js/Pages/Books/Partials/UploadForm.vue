@@ -19,7 +19,7 @@ const form = useForm({
     height: 0,
     lastModified: null,
 
-// exif情報
+    // exif情報
     XResolution: null,
     YResolution: null,
     ResolutionUnit: null,
@@ -29,9 +29,8 @@ const form = useForm({
  * フォームを初期化
  */
 function formReset() {
-    document.getElementById('formFile').value = '';
+    form.clearErrors();
     form.reset();
-    form.errors = {};
 }
 
 /**
@@ -133,6 +132,14 @@ function setFormData(file, img, exif) {
                 <p class="mb-0 text-secondary">ドロップするとファイルをアップロードします</p>
             </div>
         </div>
+        <div v-else-if="form.processing" class="row d-flex align-items-center h-100">
+            <div class="col-12">
+                <p>アップロード中</p>
+                <div class="spinner-border text-secondary m-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
         <div v-else class="row m-0 border-0">
             <div class="col-6 text-center">
                 <i class="bi bi-file-earmark-arrow-up"/>
@@ -167,7 +174,13 @@ export default {
     background-color: #ececec;
     height: 150px;
 
-    &.has-error{
+    .row {
+        margin-bottom: 0;
+        border: 0;
+        text-align: center;
+    }
+
+    &.has-error {
         border: dashed 2px #ff5252;
     }
 
