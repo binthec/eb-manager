@@ -1,14 +1,12 @@
 <script setup xmlns="http://www.w3.org/1999/html">
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head} from "@inertiajs/vue3";
 import {reactive} from "vue";
-import List from "@/Pages/Books/Partials/List.vue";
 import _ from "lodash";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import UploadForm from "@/Pages/Books/Partials/UploadForm.vue";
-
-// modal
-import DeleteModal from "@/Components/DeleteModal.vue";
+import List from "@/Pages/Books/Partials/List.vue";
 import ViewModal from "@/Components/ViewModal.vue";
+import DeleteModal from "@/Components/DeleteModal.vue";
 
 const viewModal = reactive({
     show: false,

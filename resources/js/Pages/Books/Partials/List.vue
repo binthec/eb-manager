@@ -10,8 +10,7 @@ const {getJADate} = useFormatDate();
         <div class="col mb-3" v-for="(book) in books">
             <div class="card h-100">
                 <div class="img-box">
-                    <img :src="'storage/' + book.filepath" class="align-self-center"
-                         loading="lazy"
+                    <img :src="'storage/' + book.filepath" class="align-self-center" loading="lazy"
                          @click="viewModal.show = true; viewModal.book = book"/>
                 </div>
                 <div class="card-body bg-light">

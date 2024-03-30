@@ -3,6 +3,7 @@ import {ref} from "vue";
 import {useForm} from "@inertiajs/vue3";
 import loadImage from "blueimp-load-image"
 import useFormatDate from "@/Composables/FormatDate.js";
+import _ from "lodash";
 
 const {getJADatetime} = useFormatDate();
 
@@ -122,7 +123,8 @@ function setFormData(file, img, exif) {
 </script>
 
 <template>
-    <div class="drop-area" @drop="dropHandler" @dragover="dragOverHandler" @dragleave="onDragOver = false">
+    <div class="drop-area" :class="{ 'has-error' : !_.isEmpty(form.errors) }"
+         @drop="dropHandler" @dragover="dragOverHandler" @dragleave="onDragOver = false">
         <div v-if="onDragOver === true" class="row m-0 border-0 text-center">
             <div class="col-6">
                 <div class="fuwa"><i class="bi bi-cloud-upload-fill"/></div>
@@ -138,7 +140,7 @@ function setFormData(file, img, exif) {
             <div class="col-6 text-center d-flex align-items-center">
                 <div>
                     <p class="text-secondary text-sm">ファイルをここにドラッグ＆ドロップするか<br/>ファイルを選択してください</p>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" @click="fireFileInput">
+                    <button type="button" class="btn btn-outline-secondary" @click="fireFileInput">
                         ファイルを選択
                     </button>
                     <input class="d-none" type="file" id="formFile"
@@ -164,6 +166,10 @@ export default {
     border-radius: 0.5rem;
     background-color: #ececec;
     height: 150px;
+
+    &.has-error{
+        border: dashed 2px #ff5252;
+    }
 
     i {
         font-size: 100px;
