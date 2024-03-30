@@ -16,8 +16,8 @@ Vue.js のバージョンは 3.4。Composition API を使用。
   - vue-modal
   - day.js
   - lodash.js
-  - blueimp-load-image
   - sass
+  - blueimp-load-image
 
 ## Todo
 
@@ -33,3 +33,10 @@ Vue.js のバージョンは 3.4。Composition API を使用。
   - 管理画面からカルーセル用の画像をアップロードする機能を追加
 
 And More...
+
+## Idea
+
+- Note Web (Laravel6+Vue.js2で作ったアプリ)をこっちに移植する？
+- 会議室・イベントホールの予約機能？
+- ニュース・お知らせ・イベント告知機能？
+- ↑の日付を網羅したイベントカレンダー機能？
