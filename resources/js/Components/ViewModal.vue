@@ -1,8 +1,10 @@
 <script setup>
+import {computed} from "vue";
 import {Modal} from "@kouts/vue-modal";
-defineProps(['modal', 'book']);
-
 import useFormatDate from "../Composables/FormatDate.js"
+
+const props = defineProps(['modal']);
+const book = computed(() => props.modal.book);
 const {getJADate, getJADatetime} = useFormatDate();
 </script>
 
