@@ -8,73 +8,75 @@ import ViewModal from "@/Components/ViewModal.vue";
 import DeleteModal from "@/Components/DeleteModal.vue";
 
 const {getJADate} = useFormatDate();
+
 const props = defineProps(['books']);
 const books = computed(() => props.books);
 
+const uploaded = ref(false); // アップロード直後かどうかの状態を持つ
+const uploadedId = ref(0);   // アップロードされた直後のレコードID
+
 const viewModal = reactive({
-    show: false,
-    book: {}
+    show: false,      // viewModal の表示・非表示の状態
+    book: {}          // 表示する対象の book
 });
 
 const delModal = reactive({
-    show: false,
-    book: {},
-    deleted: false,
+    show: false,      // delModal の表示・非表示の状態
+    book: {},         // 削除する対象の book
+    deleting: false,  // 削除実行中であるかの状態を持つ
 });
 
-// アップロードされたかどうかの状態を持つ
-const uploaded = ref(false);
-// アップロードされたファイルのID
-const uploadedId = ref(0);
+/**
+ * 削除モーダルはファイル削除後に値を script 内で変更し、
+ * 親子コンポーネントで双方向にバインディングする必要があるため provide する
+ */
+provide('delModal', delModal);
 
 /**
- * アップロードされたばかりのcardには、目立つように数秒枠を表示する
- * @param card_id
+ * book_id を持つ card がアップロード直後のものかどうかの判定
+ * @param book_id
  * @returns {boolean}
  */
-function isUploadedCard(card_id) {
-    return uploaded.value && card_id === uploadedId.value;
+function isUploadedCard(book_id) {
+    return uploaded.value && book_id === uploadedId.value;
 }
 
 /**
- * 削除完了した際に、削除済み画像があった場所に数秒空枠を表示する
+ * book_id をもつ card が削除中かどうかの判定
+ * @param book_id
+ * @returns {boolean}
+ */
+function isDeletingCard(book_id) {
+    return delModal.deleting && book_id === delModal.book.id;
+}
+
+/**
+ * books を監視し、変化があった際に card の表示を変化させる
  */
 watch((books), (newVal, oldVal) => {
-    console.log('oldVal.length = ' + oldVal.length);
-    console.log('newVal.length = ' + newVal.length);
-    console.log('変更を検知！');
-
-    if (newVal.length < oldVal.length) {
-        console.log('削除されました！');
-        delModal.deleted = true;
-    } else if (newVal.length > oldVal.length) {
+    if (newVal.length > oldVal.length) {
+        // ファイルがアップロードされた【後】数秒新しいファイルをハイライトする
         uploaded.value = true;
         uploadedId.value = _.head(newVal).id;
         setTimeout(() => {
-            // 枠が消えた後に、値は初期化する
+            // 枠表示後に、フラグは初期化する
             uploaded.value = false;
             uploadedId.value = 0;
         }, 1500);
+    } else if (newVal.length < oldVal.length) { // 削除【中】対象をオーバーレイする
+        // 枠表示後、フラグと book は初期化する
+        delModal.deleting = false;
+        delModal.book = {};
     }
 });
-
-/**
- * 削除モーダルは削除後に値をscript内で変更する必要があるため provide して
- * 親の値と双方向にやりとり出来るようにする
- */
-provide('delModal', delModal);
 </script>
 
 <template>
     <div class="row row-cols-4 border-top-0">
-        <div v-show="delModal.completed === true" class="col mb-3">
-            <div class="card h-100 deleting-card d-flex align-items-sm-center">
-                <p class="mb-0">削除済</p>
-            </div>
-        </div>
         <div class="col mb-3" v-for="(book) in books">
             <div class="card h-100 position-relative">
                 <div v-show="isUploadedCard(book.id)" class="is-uploaded"></div>
+                <div v-show="isDeletingCard(book.id)" class="is-deleting"><p>削除中...</p></div>
                 <div class="img-box">
                     <img :src="'storage/' + book.filepath" class="align-self-center" loading="lazy"
                          @click="viewModal.show = true"/>
@@ -107,6 +109,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/**
+ * アップロード直後の card に枠をつけて強調する
+ */
 .is-uploaded {
     border: solid 5px #54c5cb;
     position: absolute;
@@ -121,15 +126,33 @@ export default {
     }
 }
 
-.deleting-card {
+/**
+ * 削除【中】の card にオーバーレイして強調する
+ */
+.is-deleting {
     border: dashed 2px #babbbc;
     border-radius: 0.3rem;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 10;
+    background-color: rgba(255, 255, 255, 0.8);
 
-    .p {
-        margin: auto 0;
+    display: flex;
+    align-items: center;
+
+    p {
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        font-size: x-large;
+        color: gray;
     }
 }
 
+/**
+ * common
+ */
 .card,
 .img-box,
 .card-footer {

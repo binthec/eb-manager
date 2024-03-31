@@ -79,7 +79,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book): RedirectResponse
     {
-        sleep(2);
+        sleep(1);
 
         Gate::authorize('delete', $book);
 

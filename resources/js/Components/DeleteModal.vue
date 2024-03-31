@@ -12,7 +12,9 @@ const book = computed(() => modal.book);
  * @param id
  */
 function submit(id) {
-    form.delete(route('books.destroy', id), {onSuccess: () => modal.show = false});
+    form.delete(route('books.destroy', id));
+    modal.show = false;    // モーダルを閉じる
+    modal.deleting = true; // 削除中フラグを立てる
 }
 </script>
 
@@ -31,11 +33,7 @@ function submit(id) {
                 やめる
             </button>
             <button class="btn btn-danger float-end" @click="submit(book.id)" :disabled="form.processing">
-                <span v-if="form.processing === true">
-                    <span class="spinner-border spinner-border-sm text-dark mr-1" role="status"
-                          aria-hidden="true"></span>削除中...
-                </span>
-                <span v-else>削除実行</span>
+                削除実行
             </button>
         </div>
     </Modal>
