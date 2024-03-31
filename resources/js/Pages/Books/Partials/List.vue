@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeUpdate, provide, reactive, ref, watch} from "vue";
+import {computed, inject, provide, reactive, ref, watch} from "vue";
 import useFormatDate from "@/Composables/FormatDate.js";
 import _ from "lodash";
 
@@ -8,6 +8,7 @@ import ViewModal from "@/Components/ViewModal.vue";
 import DeleteModal from "@/Components/DeleteModal.vue";
 
 const {getJADate} = useFormatDate();
+const toast = inject('customToast'); // toast を使うので inject する
 
 const props = defineProps(['books']);
 const books = computed(() => props.books);
@@ -54,19 +55,24 @@ function isDeletingCard(book_id) {
  * books を監視し、変化があった際に card の表示を変化させる
  */
 watch((books), (newVal, oldVal) => {
-    if (newVal.length > oldVal.length) {
-        // ファイルがアップロードされた【後】数秒新しいファイルをハイライトする
-        uploaded.value = true;
-        uploadedId.value = _.head(newVal).id;
+    toast.show = true;
+    if (newVal.length > oldVal.length) {      // ファイルがアップロードされた【後】の処理
+        uploaded.value = true;                // アップロードフラグを立てる
+        uploadedId.value = _.head(newVal).id; // アップロードされたファイルのIDを設定
+        toast.type = 'uploaded';              // toast のタイプを設定する
+        setTimeout(() => {
+            uploaded.value = false; // アップロードフラグを初期化
+            uploadedId.value = 0;   // アップロード対象ファイルのIDを初期化
+        }, 3000);
+    } else if (newVal.length < oldVal.length) { // 削除後の処理
+        delModal.deleting = false; // 削除フラグを初期化
+        delModal.book = {};        // book を初期化
+        toast.type = 'deleted';　  // toast のタイプを設定する
         setTimeout(() => {
             // 枠表示後に、フラグは初期化する
             uploaded.value = false;
             uploadedId.value = 0;
-        }, 1500);
-    } else if (newVal.length < oldVal.length) { // 削除【中】対象をオーバーレイする
-        // 枠表示後、フラグと book は初期化する
-        delModal.deleting = false;
-        delModal.book = {};
+        }, 3000);
     }
 });
 </script>
@@ -110,17 +116,20 @@ export default {
 
 <style lang="scss" scoped>
 /**
- * アップロード直後の card に枠をつけて強調する
+ * アップロード【直後】の card に枠をつけて強調する
  */
 .is-uploaded {
-    border: solid 5px #54c5cb;
+    border: solid 5px #76e17f;
     position: absolute;
     height: 100%;
     width: 100%;
-    animation: fadeout-anime 1s linear forwards;
+    animation: auto-hide 3s linear forwards;
 }
 
-@keyframes fadeout-anime {
+@keyframes auto-hide {
+    90% {
+        opacity: 100;
+    }
     100% {
         opacity: 0;
     }

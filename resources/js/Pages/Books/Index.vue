@@ -1,7 +1,8 @@
 <script setup xmlns="http://www.w3.org/1999/html">
 import {Head} from "@inertiajs/vue3";
-import {reactive} from "vue";
 import _ from "lodash";
+
+// component
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import UploadForm from "@/Pages/Books/Partials/UploadForm.vue";
 import List from "@/Pages/Books/Partials/List.vue";
