@@ -9,10 +9,9 @@ const toast = inject('customToast');
 watch((toast), (newVal, oldVal) => {
     if (newVal.show) {
         setTimeout(() => {
-            // n秒後に初期化する
             toast.show = false;
             toast.type = '';
-        }, 3000);
+        }, 3000);  // n秒後に初期化する
     }
 });
 </script>

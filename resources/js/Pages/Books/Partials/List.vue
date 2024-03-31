@@ -52,27 +52,30 @@ function isDeletingCard(book_id) {
 }
 
 /**
+ * アップロード関連の toast にわたす情報をセット
+ * @param flag
+ * @param id
+ */
+function setUploaded(flag = false, id = 0) {
+    uploaded.value = flag; // アップロードされた直後かどうか
+    uploadedId.value = id; // アップロードされたファイルのIDを設定
+}
+
+/**
  * books を監視し、変化があった際に card の表示を変化させる
  */
 watch((books), (newVal, oldVal) => {
     toast.show = true;
-    if (newVal.length > oldVal.length) {      // ファイルがアップロードされた【後】の処理
-        uploaded.value = true;                // アップロードフラグを立てる
-        uploadedId.value = _.head(newVal).id; // アップロードされたファイルのIDを設定
-        toast.type = 'uploaded';              // toast のタイプを設定する
-        setTimeout(() => {
-            uploaded.value = false; // アップロードフラグを初期化
-            uploadedId.value = 0;   // アップロード対象ファイルのIDを初期化
+    if (newVal.length > oldVal.length) {           // ファイルがアップロードされた【後】の処理
+        setUploaded(true, _.head(newVal).id); // upload直後のファイル情報をセット
+        toast.type = 'uploaded';                   // toast のタイプを設定する
+        setTimeout(() => {                 // n秒後に初期化する
+            setUploaded();
         }, 3000);
     } else if (newVal.length < oldVal.length) { // 削除後の処理
         delModal.deleting = false; // 削除フラグを初期化
         delModal.book = {};        // book を初期化
         toast.type = 'deleted';　  // toast のタイプを設定する
-        setTimeout(() => {
-            // 枠表示後に、フラグは初期化する
-            uploaded.value = false;
-            uploadedId.value = 0;
-        }, 3000);
     }
 });
 </script>
@@ -127,7 +130,10 @@ export default {
 }
 
 @keyframes auto-hide {
-    90% {
+    33%{
+        opacity: 0;
+    }
+    66% {
         opacity: 100;
     }
     100% {
