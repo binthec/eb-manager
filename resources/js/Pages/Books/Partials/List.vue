@@ -1,13 +1,15 @@
 <script setup>
-import {provide, reactive} from "vue";
+import {computed, onBeforeUpdate, provide, reactive, ref, watch} from "vue";
 import useFormatDate from "@/Composables/FormatDate.js";
+import _ from "lodash";
 
 // コンポーネント
 import ViewModal from "@/Components/ViewModal.vue";
 import DeleteModal from "@/Components/DeleteModal.vue";
 
-defineProps(['books']);
 const {getJADate} = useFormatDate();
+const props = defineProps(['books']);
+const books = computed(() => props.books);
 
 const viewModal = reactive({
     show: false,
@@ -16,7 +18,44 @@ const viewModal = reactive({
 
 const delModal = reactive({
     show: false,
-    book: {}
+    book: {},
+    deleted: false,
+});
+
+// アップロードされたかどうかの状態を持つ
+const uploaded = ref(false);
+// アップロードされたファイルのID
+const uploadedId = ref(0);
+
+/**
+ * アップロードされたばかりのcardには、目立つように数秒枠を表示する
+ * @param card_id
+ * @returns {boolean}
+ */
+function isUploadedCard(card_id) {
+    return uploaded.value && card_id === uploadedId.value;
+}
+
+/**
+ * 削除完了した際に、削除済み画像があった場所に数秒空枠を表示する
+ */
+watch((books), (newVal, oldVal) => {
+    console.log('oldVal.length = ' + oldVal.length);
+    console.log('newVal.length = ' + newVal.length);
+    console.log('変更を検知！');
+
+    if (newVal.length < oldVal.length) {
+        console.log('削除されました！');
+        delModal.deleted = true;
+    } else if (newVal.length > oldVal.length) {
+        uploaded.value = true;
+        uploadedId.value = _.head(newVal).id;
+        setTimeout(() => {
+            // 枠が消えた後に、値は初期化する
+            uploaded.value = false;
+            uploadedId.value = 0;
+        }, 1500);
+    }
 });
 
 /**
@@ -28,8 +67,14 @@ provide('delModal', delModal);
 
 <template>
     <div class="row row-cols-4 border-top-0">
+        <div v-show="delModal.completed === true" class="col mb-3">
+            <div class="card h-100 deleting-card d-flex align-items-sm-center">
+                <p class="mb-0">削除済</p>
+            </div>
+        </div>
         <div class="col mb-3" v-for="(book) in books">
-            <div class="card h-100">
+            <div class="card h-100 position-relative">
+                <div v-show="isUploadedCard(book.id)" class="is-uploaded"></div>
                 <div class="img-box">
                     <img :src="'storage/' + book.filepath" class="align-self-center" loading="lazy"
                          @click="viewModal.show = true"/>
@@ -61,7 +106,30 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.is-uploaded {
+    border: solid 5px #54c5cb;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    animation: fadeout-anime 1s linear forwards;
+}
+
+@keyframes fadeout-anime {
+    100% {
+        opacity: 0;
+    }
+}
+
+.deleting-card {
+    border: dashed 2px #babbbc;
+    border-radius: 0.3rem;
+
+    .p {
+        margin: auto 0;
+    }
+}
+
 .card,
 .img-box,
 .card-footer {
