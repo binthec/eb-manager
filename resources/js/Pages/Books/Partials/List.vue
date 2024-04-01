@@ -6,6 +6,7 @@ import _ from "lodash";
 // コンポーネント
 import ViewModal from "@/Components/ViewModal.vue";
 import DeleteModal from "@/Components/DeleteModal.vue";
+import {Link} from "@inertiajs/vue3";
 
 const {getJADate} = useFormatDate();
 const toast = inject('customToast'); // toast を使うので inject する
@@ -97,8 +98,13 @@ watch((books), (newVal, oldVal) => {
                 <div class="card-footer text-xl bg-white d-flex justify-content-evenly">
                     <span class="pl-2 pr-2 control-btn rounded-lg"
                           @click="viewModal.show = true; viewModal.book = book">
-                        <i class="bi bi-file-earmark-image text-success"/>
+                        <i class="bi bi-binoculars-fill text-primary"/>
                     </span>
+
+                    <Link class="pl-2 pr-2 control-btn rounded-lg">
+                        <i class="bi bi-pencil-square text-success"/>
+                    </Link>
+
                     <span class="pl-2 pr-2 control-btn rounded-lg"
                           @click="delModal.show = true; delModal.book = book">
                         <i class="bi bi-trash3-fill text-danger"/>
@@ -130,7 +136,7 @@ export default {
 }
 
 @keyframes auto-hide {
-    33%{
+    33% {
         opacity: 0;
     }
     66% {
@@ -174,13 +180,22 @@ export default {
     overflow: hidden;
 }
 
-img {
-    transition: transform 0.3s;
-}
-
-img:hover,
-.card-footer span:hover {
+.hover-action {
     cursor: pointer;
     transform: scale(1.2);
+}
+
+img {
+    transition: transform 0.3s;
+    &:hover {
+        @extend .hover-action;
+    }
+}
+
+.card-footer {
+    span:hover,
+    a:hover{
+        @extend .hover-action;
+    }
 }
 </style>
