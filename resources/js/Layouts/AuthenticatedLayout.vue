@@ -185,7 +185,7 @@ provide('customToast', toast);
             </header>
 
             <!-- Page Content -->
-            <main class="container-fluid">
+            <main class="container">
                 <div class="row p-4 sm:p-6 lg:p-8">
                     <slot/>
                     <CustomToast>{{ toast.customMsg }}</CustomToast>
