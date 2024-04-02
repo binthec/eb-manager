@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('books', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
+            $table->string('title')->nullable();
             $table->string('filename');
             $table->integer('size');
             $table->integer('width');

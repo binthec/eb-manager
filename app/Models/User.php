@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasUlids;
 
     /**
      * The attributes that are mass assignable.
@@ -54,5 +56,23 @@ class User extends Authenticatable
     public function books(): HasMany
     {
         return $this->hasMany(Book::class);
+    }
+
+    /**
+     * UUIDを生成して返す
+     * @return string
+     */
+    public function newUniqueId() :string
+    {
+        return (string) Str::ulid();
+    }
+
+    /**
+     * 一意の識別子を受け取るカラムの取得
+     * @return string[]
+     */
+    public function uniqueIds(): array
+    {
+        return ['id'];
     }
 }

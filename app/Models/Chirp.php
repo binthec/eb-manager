@@ -23,4 +23,13 @@ class Chirp extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * 一意の識別子を受け取るカラムの取得
+     * @return string[]
+     */
+    public function uniqueIds(): array
+    {
+        return ['user_id'];
+    }
 }
