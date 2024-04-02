@@ -94,7 +94,7 @@ watch((books), (newVal, oldVal) => {
                          @click="viewModal.show = true; viewModal.book = book"/>
                 </div>
                 <div class="card-body bg-light">
-                    【ID:{{ book.id }}】{{ book.filename }}<br/>
+                    {{ book.filename }}
                     <span class="text-sm text-secondary">{{ getJADate(book.created_at) }}</span>
                 </div>
                 <div class="card-footer text-xl bg-white d-flex justify-content-evenly">
