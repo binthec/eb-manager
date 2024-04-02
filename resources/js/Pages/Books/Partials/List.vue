@@ -91,7 +91,7 @@ watch((books), (newVal, oldVal) => {
                 <div v-show="isDeletingCard(book.id)" class="is-deleting"><p>削除中...</p></div>
                 <div class="img-box">
                     <img :src="'storage/' + book.filepath" class="align-self-center" loading="lazy"
-                         @click="viewModal.show = true"/>
+                         @click="viewModal.show = true; viewModal.book = book"/>
                 </div>
                 <div class="card-body bg-light">
                     【ID:{{ book.id }}】{{ book.filename }}<br/>

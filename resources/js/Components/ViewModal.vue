@@ -1,6 +1,7 @@
 <script setup>
 import {computed, inject} from "vue";
 import {Modal} from "@kouts/vue-modal";
+import {Link} from "@inertiajs/vue3";
 import useFormatDate from "../Composables/FormatDate.js"
 
 const props = defineProps(['modal']);
@@ -14,7 +15,7 @@ const {getJADate, getJADatetime} = useFormatDate();
             <div class="row">
                 <div class="col-6">
                     <div class="mb-4 d-flex justify-content-center">
-                        <img :src="'storage/' + book.filepath" class="mh-500"/>
+                        <img :src="'/storage/' + book.filepath" class="mh-500"/>
                     </div>
                 </div>
                 <div class="col-6">
@@ -67,10 +68,11 @@ const {getJADate, getJADatetime} = useFormatDate();
                     </table>
                 </div>
             </div>
-            <div class="d-grid gap-2">
-                <button type="button" class="btn btn-outline-secondary" @click="modal.show = false">
+            <div class="d-flex justify-content-between">
+                <button type="button" class="col-3 btn btn-outline-secondary" @click="modal.show = false">
                     閉じる
                 </button>
+                <Link :href="route('books.edit', book.id)" class="col-3 btn btn-success">編集する</Link>
             </div>
         </Modal>
     </div>
