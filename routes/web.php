@@ -32,8 +32,8 @@ Route::middleware('auth')->group(function () {
 
     // 電子帳簿
     Route::resource('books', BookController::class)
-        ->only(['index', 'store', 'destroy'])
+        ->only(['index', 'store', 'edit', 'update', 'destroy'])
         ->middleware(['auth', 'verified']);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

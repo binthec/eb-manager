@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BookStoreRequest;
+use App\Http\Requests\BookRequest;
 use App\Models\Book;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +15,8 @@ use Inertia\Response;
 class BookController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 一覧
+     * @return Response
      */
     public function index(): Response
     {
@@ -33,14 +34,13 @@ class BookController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 新規登録処理
+     * @param BookRequest $request
+     * @return RedirectResponse
      */
-    public function store(BookStoreRequest $request): RedirectResponse
+    public function store(BookRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-
-        Log::debug('$validated');
-        Log::debug($validated);
 
         // ファイルをストレージに保存
         $validated['filepath'] = $request->file->store('books/' . $request->user()->id, 'public');
@@ -59,23 +59,37 @@ class BookController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 編集画面表示
+     * @param Book $book
+     * @return Response
      */
-    public function edit(Book $book)
+    public function edit(Book $book) :Response
     {
-        //
+        return Inertia::render('Books/Edit', [
+            'book' => $book,
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * 更新処理
+     * @param BookRequest $request
+     * @param Book $book
+     * @return RedirectResponse
      */
-    public function update(Request $request, Book $book)
+    public function update(BookRequest $request, Book $book) :RedirectResponse
     {
-        //
+        Gate::authorize('update', $book);
+
+        $validated = $request->validated();
+        $book->update($validated);
+
+        return redirect(route('books.index'));
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 削除処理
+     * @param Book $book
+     * @return RedirectResponse
      */
     public function destroy(Book $book): RedirectResponse
     {

@@ -11,7 +11,7 @@ defineProps(['books']);
 </script>
 
 <template>
-    <Head title="Books ー電子帳簿ー"/>
+    <Head title="Books 電子帳簿一覧"/>
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Electronic Books　電子帳簿</h2>

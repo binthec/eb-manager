@@ -66,17 +66,19 @@ function setUploaded(flag = false, id = 0) {
  * books を監視し、変化があった際に card の表示を変化させる
  */
 watch((books), (newVal, oldVal) => {
-    toast.show = true;
-    if (newVal.length > oldVal.length) {           // ファイルがアップロードされた【後】の処理
-        setUploaded(true, _.head(newVal).id); // upload直後のファイル情報をセット
-        toast.type = 'uploaded';                   // toast のタイプを設定する
-        setTimeout(() => {                 // n秒後に初期化する
-            setUploaded();
-        }, 3000);
-    } else if (newVal.length < oldVal.length) { // 削除後の処理
-        delModal.deleting = false; // 削除フラグを初期化
-        delModal.book = {};        // book を初期化
-        toast.type = 'deleted';　  // toast のタイプを設定する
+    if(newVal.length !== oldVal.length){
+        toast.show = true;
+        if (newVal.length > oldVal.length) {           // ファイルがアップロードされた【後】の処理
+            setUploaded(true, _.head(newVal).id); // upload直後のファイル情報をセット
+            toast.type = 'uploaded';                   // toast のタイプを設定する
+            setTimeout(() => {                 // n秒後に初期化する
+                setUploaded();
+            }, 3000);
+        } else { // 削除後の処理
+            delModal.deleting = false; // 削除フラグを初期化
+            delModal.book = {};        // book を初期化
+            toast.type = 'deleted';　  // toast のタイプを設定する
+        }
     }
 });
 </script>
@@ -100,11 +102,9 @@ watch((books), (newVal, oldVal) => {
                           @click="viewModal.show = true; viewModal.book = book">
                         <i class="bi bi-binoculars-fill text-primary"/>
                     </span>
-
-                    <Link class="pl-2 pr-2 control-btn rounded-lg">
+                    <Link :href="route('books.edit', book.id)" class="pl-2 pr-2 control-btn rounded-lg">
                         <i class="bi bi-pencil-square text-success"/>
                     </Link>
-
                     <span class="pl-2 pr-2 control-btn rounded-lg"
                           @click="delModal.show = true; delModal.book = book">
                         <i class="bi bi-trash3-fill text-danger"/>
