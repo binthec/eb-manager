@@ -33,7 +33,7 @@ const form = useForm({
                     </div>
                 </div>
                 <div class="col">
-                    <form @submit.prevent="form.patch(route('books.update', book.id), {onSuccess: () => form.reset()})"
+                    <form @submit.prevent="form.patch(route('books.update', book.id))"
                           class="mb-4">
                         <InputLabel for="title" value="名前" />
                         <TextInput
