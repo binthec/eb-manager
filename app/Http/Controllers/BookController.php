@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\BookRequest;
+use App\Http\Requests\BookStoreRequest;
+use App\Http\Requests\BookUpdateRequest;
 use App\Models\Book;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -36,10 +36,10 @@ class BookController extends Controller
 
     /**
      * 新規登録処理
-     * @param BookRequest $request
+     * @param BookStoreRequest $request
      * @return RedirectResponse
      */
-    public function store(BookRequest $request): RedirectResponse
+    public function store(BookStoreRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -73,18 +73,18 @@ class BookController extends Controller
 
     /**
      * 更新処理
-     * @param BookRequest $request
+     * @param BookUpdateRequest $request
      * @param Book $book
      * @return RedirectResponse
      */
-    public function update(BookRequest $request, Book $book) :RedirectResponse
+    public function update(BookUpdateRequest $request, Book $book) :RedirectResponse
     {
         Gate::authorize('update', $book);
 
         $validated = $request->validated();
         $book->update($validated);
 
-        return redirect(route('books.index'));
+        return redirect(route('books.edit', $book->id));
     }
 
     /**

@@ -1,12 +1,22 @@
 <script setup xmlns="http://www.w3.org/1999/html">
-import {Head} from "@inertiajs/vue3";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue"
+import {computed, defineProps} from "vue";
+import {Head, useForm, Link, usePage} from "@inertiajs/vue3";
+
+// コンポーネント
 import useFormatDate from "@/Composables/FormatDate.js";
-import {Link} from "@inertiajs/vue3";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue"
+import InputError from "@/Components/InputError.vue";
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
+
+
+const props = defineProps(['book']);
+const book = computed(() => props.book);
 
 const {getJADate, getJADatetime} = useFormatDate();
-
-defineProps(['book']);
+const form = useForm({
+    title: book.value.title,
+});
 </script>
 <template>
     <Head title="Books 電子帳簿 編集"/>
@@ -23,6 +33,24 @@ defineProps(['book']);
                     </div>
                 </div>
                 <div class="col">
+                    <form @submit.prevent="form.patch(route('books.update', book.id), {onSuccess: () => form.reset()})"
+                          class="mb-4">
+                        <InputLabel for="title" value="名前" />
+                        <TextInput
+                            id="name"
+                            type="text"
+                            class="form-control"
+                            v-model="form.title"
+                            required
+                            autofocus
+                            autocomplete="title"
+                        />
+                        <InputError class="mt-2" :message="form.errors.title" />
+                        <div class="mt-3 text-end">
+                            <button class="btn btn-success col-6">更新する</button>
+                        </div>
+                    </form>
+                    <hr/>
                     電子保存情報
                     <table class="table table-bordered">
                         <tbody>
