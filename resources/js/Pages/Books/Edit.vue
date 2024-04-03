@@ -14,6 +14,9 @@ const book = computed(() => usePage().props.book);
 const {getJADate, getJADatetime} = useFormatDate();
 const form = useForm({
     title: book.value.title,
+    publisher: book.value.publisher,
+    issue_date: book.value.issue_date,
+    price: book.value.price,
 });
 </script>
 <template>
@@ -24,27 +27,68 @@ const form = useForm({
         </template>
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
             <div class="row row-cols-2">
+                <div class="col-12"><p>{{ book.filename }}</p></div>
                 <div class="col">
-                    <p>{{ book.filename }}</p>
                     <div class="mb-4 d-flex justify-content-center">
                         <img :src="'/storage/' + book.filepath"/>
                     </div>
                 </div>
                 <div class="col">
-                    <form @submit.prevent="form.patch(route('books.update', book.id))"
-                          class="mb-4">
-                        <InputLabel for="title" value="名前"/>
-                        <TextInput
-                            id="name"
-                            type="text"
-                            class="form-control"
-                            :class="{'is-invalid' : form.errors.title}"
-                            v-model="form.title"
-                            required
-                            autofocus
-                            autocomplete="title"
-                        />
-                        <InputError class="mt-2" :message="form.errors.title"/>
+                    <form @submit.prevent="form.patch(route('books.update', book.id))" class="mb-4">
+                        <div>
+                            <InputLabel for="title" value="名前"/>
+                            <TextInput
+                                id="name"
+                                type="text"
+                                class="form-control"
+                                :class="{'is-invalid' : form.errors.title}"
+                                v-model="form.title"
+                                autofocus
+                                autocomplete="title"
+                            />
+                            <InputError class="mt-2" :message="form.errors.title"/>
+                        </div>
+
+                        <div>
+                            <InputLabel for="publisher" value="発行元"/>
+                            <TextInput
+                                id="publisher"
+                                type="text"
+                                class="form-control"
+                                :class="{'is-invalid' : form.errors.publisher}"
+                                v-model="form.publisher"
+                                autocomplete="publisher"
+                            />
+                            <InputError class="mt-2" :message="form.errors.publisher"/>
+                        </div>
+
+                        <div>
+                            <InputLabel for="issue_date" value="発行日"/>
+                            <TextInput
+                                id="issue_date"
+                                type="text"
+                                class="form-control"
+                                :class="{'is-invalid' : form.errors.issue_date}"
+                                v-model="form.issue_date"
+                                autocomplete="issue_date"
+                            />
+                            <InputError class="mt-2" :message="form.errors.issue_date"/>
+                        </div>
+
+                        <div>
+                            <InputLabel for="price" value="金額"/>
+                            <TextInput
+                                id="price"
+                                type="text"
+                                class="form-control"
+                                :class="{'is-invalid' : form.errors.price}"
+                                v-model="form.price"
+                                autofocus
+                                autocomplete="price"
+                            />
+                            <InputError class="mt-2" :message="form.errors.price"/>
+                        </div>
+
                         <div class="mt-3 text-end">
                             <span v-show="form.recentlySuccessful" class="mr-2 text-success">
                                 <i class="bi bi-check2-circle text-xl align-middle mr-1"/>Saved!
@@ -59,24 +103,6 @@ const form = useForm({
                         </div>
                     </form>
                     <hr/>
-                    電子保存情報
-                    <table class="table table-bordered">
-                        <tbody>
-                        <tr>
-                            <td>発行元</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>発行日</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>金額</td>
-                            <td></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
 
                     アップロード日・サイズ情報
                     <table class="table table-bordered">
@@ -110,7 +136,6 @@ const form = useForm({
             </div>
             <div class="row border-0 d-flex justify-content-between">
                 <Link :href="route('books.index')" class="col-3 btn btn-outline-secondary">もどる</Link>
-                <Link :href="route('books.edit', book.id)" class="col-3 btn btn-success">更新する</Link>
             </div>
         </div>
     </AuthenticatedLayout>
@@ -127,5 +152,9 @@ table tbody tr td:first-child {
     text-align: center;
     background-color: #f7fafc;
     width: 30%;
+}
+
+form div{
+    margin-bottom: 1rem;
 }
 </style>

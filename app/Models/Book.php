@@ -15,14 +15,17 @@ class Book extends Model
     protected $fillable = [
         'title',
         'filename',
-        'filepath',
+        'publisher',
+        'issue_date',
+        'price',
         'size',
         'width',
         'height',
-        'lastModified',
-        'ResolutionUnit',
         'XResolution',
         'YResolution',
+        'ResolutionUnit',
+        'lastModified',
+        'filepath',
     ];
 
     public function user(): BelongsTo

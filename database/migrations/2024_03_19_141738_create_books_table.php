@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
-            $table->string('title')->nullable();
             $table->string('filename');
+            $table->string('title')->nullable();
+            $table->string('publisher')->nullable();
+            $table->date('issue_date')->nullable();
+            $table->integer('price')->nullable();
             $table->integer('size');
             $table->integer('width');
             $table->integer('height');
