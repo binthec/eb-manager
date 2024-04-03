@@ -33,7 +33,7 @@ const form = useForm({
                 <div class="col">
                     <form @submit.prevent="form.patch(route('books.update', book.id))"
                           class="mb-4">
-                        <InputLabel for="title" value="名前" />
+                        <InputLabel for="title" value="名前"/>
                         <TextInput
                             id="name"
                             type="text"
@@ -43,9 +43,15 @@ const form = useForm({
                             autofocus
                             autocomplete="title"
                         />
-                        <InputError class="mt-2" :message="form.errors.title" />
+                        <InputError class="mt-2" :message="form.errors.title"/>
                         <div class="mt-3 text-end">
-                            <button class="btn btn-success col-6">更新する</button>
+                            <button class="btn btn-success col-6" :disabled="form.processing">
+                                <div v-show="form.processing" class="spinner-border spinner-border-sm text-light mr-2"
+                                     role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                更新する
+                            </button>
                         </div>
                     </form>
                     <hr/>
