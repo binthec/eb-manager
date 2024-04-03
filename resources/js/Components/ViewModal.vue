@@ -72,7 +72,7 @@ const {getJADate, getJADatetime} = useFormatDate();
                 <button type="button" class="col-3 btn btn-outline-secondary" @click="modal.show = false">
                     閉じる
                 </button>
-                <Link :href="route('books.edit', book.id)" class="col-3 btn btn-success">編集する</Link>
+                <Link :href="route('books.edit', book.id)" class="col-3 btn btn-success">編集ページへ行く</Link>
             </div>
         </Modal>
     </div>

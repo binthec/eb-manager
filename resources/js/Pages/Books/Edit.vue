@@ -38,6 +38,7 @@ const form = useForm({
                             id="name"
                             type="text"
                             class="form-control"
+                            :class="{'is-invalid' : form.errors.title}"
                             v-model="form.title"
                             required
                             autofocus
@@ -45,12 +46,15 @@ const form = useForm({
                         />
                         <InputError class="mt-2" :message="form.errors.title"/>
                         <div class="mt-3 text-end">
+                            <span v-show="form.recentlySuccessful" class="mr-2 text-success">
+                                <i class="bi bi-check2-circle text-xl align-middle mr-1"/>Saved!
+                            </span>
                             <button class="btn btn-success col-6" :disabled="form.processing">
-                                <div v-show="form.processing" class="spinner-border spinner-border-sm text-light mr-2"
-                                     role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                                更新する
+                                <span v-if="form.processing === true">
+                                    <span class="spinner-border spinner-border-sm text-light mr-2"
+                                          role="status"/>更新中...
+                                </span>
+                                <span v-else>更新する</span>
                             </button>
                         </div>
                     </form>
