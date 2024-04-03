@@ -18,7 +18,7 @@ defineProps(['books']);
         </template>
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
             <UploadForm/>
-            <List v-if="!_.isEmpty(books)" :books="books"/>
+            <List v-if="!_.isEmpty(books)"/>
             <div v-else class="books-empty border-top-0"> ファイルを登録してください。</div>
         </div>
     </AuthenticatedLayout>

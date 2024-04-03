@@ -9,9 +9,7 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 
-
-const props = defineProps(['book']);
-const book = computed(() => props.book);
+const book = computed(() => usePage().props.book);
 
 const {getJADate, getJADatetime} = useFormatDate();
 const form = useForm({

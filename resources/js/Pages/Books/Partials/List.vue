@@ -6,13 +6,12 @@ import _ from "lodash";
 // コンポーネント
 import ViewModal from "@/Components/ViewModal.vue";
 import DeleteModal from "@/Components/DeleteModal.vue";
-import {Link} from "@inertiajs/vue3";
+import {Link, usePage} from "@inertiajs/vue3";
 
 const {getJADate} = useFormatDate();
 const toast = inject('customToast'); // toast を使うので inject する
 
-const props = defineProps(['books']);
-const books = computed(() => props.books);
+const books = computed(() => usePage().props.books);
 
 const uploaded = ref(false); // アップロード直後かどうかの状態を持つ
 const uploadedId = ref(0);   // アップロードされた直後のレコードID
