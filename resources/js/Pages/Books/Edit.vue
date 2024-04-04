@@ -13,10 +13,10 @@ const book = computed(() => usePage().props.book);
 
 const {getJADate, getJADatetime} = useFormatDate();
 const form = useForm({
-    title: book.value.title,
-    publisher: book.value.publisher,
-    issue_date: book.value.issue_date,
-    price: book.value.price,
+    title: book.value.title ?? '',
+    publisher: book.value.publisher ?? '',
+    issue_date: book.value.issue_date ?? '',
+    price: book.value.price ?? '',
 });
 </script>
 <template>
