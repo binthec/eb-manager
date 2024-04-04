@@ -1,5 +1,5 @@
 <script setup xmlns="http://www.w3.org/1999/html">
-import {computed, defineProps} from "vue";
+import {computed} from "vue";
 import {Head, useForm, Link, usePage} from "@inertiajs/vue3";
 
 // コンポーネント
@@ -8,6 +8,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue"
 import InputError from "@/Components/InputError.vue";
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
+import CustomPopover from "@/Components/CustomPopover.vue";
 
 const book = computed(() => usePage().props.book);
 
@@ -29,7 +30,8 @@ const form = useForm({
             <div class="row row-cols-2">
                 <div class="col-12 d-flex">
                     <p>{{ book.filename }}</p>
-                    <p class="m-auto me-0 bg-gray-200 pt-1 pb-1 pl-2 pr-2 text-sm rounded">作成日：{{ getJADate(book.created_at) }}</p>
+                    <p class="m-auto me-0 bg-gray-200 pt-1 pb-1 pl-2 pr-2 text-sm rounded">
+                        作成日：{{ getJADate(book.created_at) }}</p>
                 </div>
                 <div class="col">
                     <div class="d-flex justify-content-center">
@@ -40,6 +42,9 @@ const form = useForm({
                         <span>{{ book.width }} x {{ book.height }}</span>
                         <span>{{ Math.round(book.size / 1024) }} KB</span>
                         <span v-show="book.XResolution">{{ book.XResolution }} dpi</span>
+                        <CustomPopover :placement="'top'"
+                                       :content="'画像登録時に自動取得された情報です'"
+                                       :icon-class="'text-secondary'"/>
                     </div>
                 </div>
                 <div class="col">
@@ -137,7 +142,7 @@ form div {
     margin-bottom: 1rem;
 }
 
-.img-info span{
+.img-info span {
     background-color: #ccc;
     margin-right: 5px;
     padding: 2px 8px;

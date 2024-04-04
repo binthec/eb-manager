@@ -27,7 +27,7 @@ Vue.js のバージョンは 3.4。Composition API を使用。
   - PDF対応
   - Alert か Toast で動作完了を通知する機能の追加
 - 管理画面のレイアウト変更
-- ツールチップ追加
+- ~~ツールチップ追加~~ Popoverだけど！Done!
 - ローダー追加
 - フロントをLPっぽくする
   - Bootstrap5.3の[カルーセル](https://getbootstrap.jp/docs/5.3/components/carousel/)を入れる
