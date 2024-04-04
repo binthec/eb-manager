@@ -79,6 +79,7 @@ class BookController extends Controller
      */
     public function update(BookUpdateRequest $request, Book $book) :RedirectResponse
     {
+        sleep(1);
         Gate::authorize('update', $book);
 
         $validated = $request->validated();

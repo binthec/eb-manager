@@ -27,45 +27,23 @@ const form = useForm({
         </template>
         <div class="mt-6 bg-white shadow-sm rounded-lg divide-y p-4">
             <div class="row row-cols-2">
-                <div class="col-12"><p>{{ book.filename }}</p></div>
+                <div class="col-12 d-flex">
+                    <p>{{ book.filename }}</p>
+                    <p class="m-auto me-0 bg-gray-200 pt-1 pb-1 pl-2 pr-2 text-sm rounded">作成日：{{ getJADate(book.created_at) }}</p>
+                </div>
                 <div class="col">
-                    <div class="mb-4 d-flex justify-content-center">
+                    <div class="d-flex justify-content-center">
                         <img :src="'/storage/' + book.filepath"/>
+                    </div>
+                    <div class="text-end img-info mt-2">
+                        <span>{{ getJADatetime(book.lastModified) }}</span>
+                        <span>{{ book.width }} x {{ book.height }}</span>
+                        <span>{{ Math.round(book.size / 1024) }} KB</span>
+                        <span v-show="book.XResolution">{{ book.XResolution }} dpi</span>
                     </div>
                 </div>
                 <div class="col">
-                    アップロード日・サイズ情報（自動取得）
-                    <table class="table table-bordered">
-                        <tbody>
-                        <tr>
-                            <td>アップロード日</td>
-                            <td>{{ getJADate(book.created_at) }}</td>
-                        </tr>
-                        <tr>
-                            <td>サイズ</td>
-                            <td>{{ Math.round(book.size / 1024) }} KB</td>
-                        </tr>
-                        <tr>
-                            <td>総画素数</td>
-                            <td>{{ book.width }} x {{ book.height }}</td>
-                        </tr>
-                        <tr>
-                            <td>解像度</td>
-                            <td>
-                                <span v-if="book.XResolution">{{ book.XResolution }} dpi</span>
-                                <span v-else class="text-secondary text-sm">取得できませんでした</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>撮影日時</td>
-                            <td>{{ getJADatetime(book.lastModified) }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                    <hr class="mt-8 mb-8"/>
-
-                    <p>追加情報</p>
+                    <p>付属情報</p>
                     <form @submit.prevent="form.patch(route('books.update', book.id))" class="">
                         <div>
                             <InputLabel for="title" value="名前"/>
@@ -135,7 +113,7 @@ const form = useForm({
                     </form>
                 </div>
             </div>
-            <div class="row border-0 d-flex justify-content-between">
+            <div class="row border-0 mt-4 d-flex justify-content-between">
                 <Link :href="route('books.index')" class="col-3 btn btn-outline-secondary">もどる</Link>
             </div>
         </div>
@@ -155,7 +133,14 @@ table tbody tr td:first-child {
     width: 30%;
 }
 
-form div{
+form div {
     margin-bottom: 1rem;
+}
+
+.img-info span{
+    background-color: #ccc;
+    margin-right: 5px;
+    padding: 2px 8px;
+    border-radius: 1rem;
 }
 </style>
