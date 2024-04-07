@@ -70,9 +70,6 @@ watch((books), (newVal, oldVal) => {
         if (newVal.length > oldVal.length) {           // ファイルがアップロードされた【後】の処理
             setUploaded(true, _.head(newVal).id); // upload直後のファイル情報をセット
             toast.type = 'uploaded';                   // toast のタイプを設定する
-            setTimeout(() => {                 // n秒後に初期化する
-                setUploaded();
-            }, 3000);
         } else { // 削除後の処理
             delModal.deleting = false; // 削除フラグを初期化
             delModal.book = {};        // book を初期化

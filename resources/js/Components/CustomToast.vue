@@ -1,24 +1,29 @@
 <script setup>
-import {inject, reactive, watch} from "vue";
+import {inject, onMounted, watch} from "vue";
+import {Toast} from 'bootstrap';
 
 const toast = inject('customToast');
 
-/**
- * toast の値を監視し、変化があった場合はn秒後に初期化する
- */
 watch((toast), (newVal, oldVal) => {
     if (newVal.show) {
-        setTimeout(() => {
-            toast.show = false;
+        // toast の設定
+        const el = document.getElementById('el');    // toast 本体の要素
+        const toastEl = Toast.getOrCreateInstance(el, { // toast を初期化
+            delay: 1000,
+        });
+        toastEl.show(); // toast を表示
+        el.addEventListener('hidden.bs.toast', () => { // 非表示完了した際の処理
+            toast.show = false; // toast 用の値を初期化
             toast.type = '';
-        }, 3000);  // n秒後に初期化する
+            //console.log('非表示完了！');
+        })
     }
 });
 </script>
 
 <template>
     <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
-        <div class="toast" :class="[{'show' : toast.show}, toast.type]" role="alert" aria-live="assertive"
+        <div id="el" class="toast" role="alert" aria-live="assertive"
              aria-atomic="true">
             <div class="toast-body d-flex">
                 <slot/>
