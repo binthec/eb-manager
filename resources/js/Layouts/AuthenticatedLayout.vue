@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, provide, reactive, ref} from 'vue';
+import {provide, reactive, ref} from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -7,10 +7,6 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import {Link} from '@inertiajs/vue3';
 import CustomToast from "@/Components/CustomToast.vue";
-
-// bootstrap
-import * as bootstrap from 'bootstrap';
-// import {Toast} from "bootstrap";
 
 const showingNavigationDropdown = ref(false);
 
@@ -25,18 +21,6 @@ const toast = reactive({
     customMsg: '',
 });
 provide('customToast', toast);
-
-// onMounted(() => {
-//     toastInit();
-// });
-// function toastInit(){
-//     let toastElList = [].slice.call(document.querySelectorAll(".toast"));
-//     toast.el = toastElList.map(function (toastEl) {
-//         return new bootstrap.Toast(toastEl, {
-//             delay: 1000,
-//         });
-//     });
-// }
 </script>
 
 <template>
