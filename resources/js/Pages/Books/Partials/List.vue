@@ -72,7 +72,7 @@ watch((books), (newVal, oldVal) => {
             toast.type = 'uploaded';                   // toast のタイプを設定する
             setTimeout(() => {                 // n秒後に初期化する
                 setUploaded();
-            }, 3000);
+            }, 5000);
         } else { // 削除後の処理
             delModal.deleting = false; // 削除フラグを初期化
             delModal.book = {};        // book を初期化

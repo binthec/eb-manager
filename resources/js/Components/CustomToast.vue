@@ -11,7 +11,7 @@ watch((toast), (newVal, oldVal) => {
         setTimeout(() => {
             toast.show = false;
             toast.type = '';
-        }, 3000);  // n秒後に初期化する
+        }, 5000);  // n秒後に初期化する
     }
 });
 </script>
@@ -41,7 +41,7 @@ export default {
 
 <style lang="scss" scoped>
 .toast {
-    animation: auto-hide 3s linear forwards;
+    animation: auto-hide 5s linear forwards;
 
     &.success, &.uploaded, &.deleted {
         border-top: solid 5px #76e17f;
