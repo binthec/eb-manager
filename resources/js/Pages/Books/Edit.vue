@@ -9,6 +9,7 @@ import InputError from "@/Components/InputError.vue";
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import CustomPopover from "@/Components/CustomPopover.vue";
+import TextareaInput from "@/Components/TextareaInput.vue";
 
 const book = computed(() => usePage().props.book);
 
@@ -18,6 +19,7 @@ const form = useForm({
     publisher: book.value.publisher ?? '',
     issue_date: book.value.issue_date ?? '',
     price: book.value.price ?? '',
+    memo: book.value.memo ?? '',
 });
 </script>
 <template>
@@ -101,6 +103,19 @@ const form = useForm({
                                 autocomplete="price"
                             />
                             <InputError class="mt-2" :message="form.errors.price"/>
+                        </div>
+
+                        <div>
+                            <InputLabel for="memo" value="メモ"/>
+                            <TextareaInput
+                                id="memo"
+                                type="textarea"
+                                class="form-control"
+                                :class="{'is-invalid' : form.errors.memo}"
+                                v-model="form.memo"
+                                autocomplete="memo"
+                            />
+                            <InputError class="mt-2" :message="form.errors.memo"/>
                         </div>
 
                         <div class="mt-3 text-end">
