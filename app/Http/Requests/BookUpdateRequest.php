@@ -28,7 +28,6 @@ class BookUpdateRequest extends FormRequest
             'publisher' => 'nullable|string|max:255',
             'issue_date' => 'nullable',
             'price' => 'nullable|numeric|max:255',
-            'memo' => 'nullable|string|max:1500',
             'size' => 'nullable|numeric',
             'width' => 'nullable|numeric',
             'height' => 'nullable|numeric',

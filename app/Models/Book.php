@@ -18,7 +18,6 @@ class Book extends Model
         'publisher',
         'issue_date',
         'price',
-        'memo',
         'size',
         'width',
         'height',

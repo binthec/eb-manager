@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('publisher')->nullable();
             $table->date('issue_date')->nullable();
             $table->integer('price')->nullable();
-            $table->text('memo')->nullable();
             $table->integer('size');
             $table->integer('width');
             $table->integer('height');
