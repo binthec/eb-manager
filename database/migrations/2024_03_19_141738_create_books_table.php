@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
             $table->string('filename');
             $table->integer('type')->nullable();
+            $table->boolean('invoice')->default(0);
+            $table->string('registration_number')->nullable();
             $table->string('title')->nullable();
             $table->string('publisher')->nullable();
             $table->date('issue_date')->nullable();

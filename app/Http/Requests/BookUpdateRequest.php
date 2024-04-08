@@ -24,6 +24,8 @@ class BookUpdateRequest extends FormRequest
         return [
             'filename' => 'nullable|string|max:255',
             'type' => 'nullable|numeric',
+            'invoice' => 'nullable|boolean',
+            'registration_number' => 'nullable|string|max:255',
             'title' => 'nullable|string|max:255',
             'file' => 'nullable',
             'publisher' => 'nullable|string|max:255',

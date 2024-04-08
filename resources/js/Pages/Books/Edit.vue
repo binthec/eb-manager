@@ -17,6 +17,8 @@ const types = computed(() => usePage().props.types);
 const {getJADate, getJADatetime} = useFormatDate();
 const form = useForm({
     type: book.value.type ?? '',
+    invoice: book.value.invoice ?? '',
+    registration_number: book.value.registration_number ?? '',
     title: book.value.title ?? '',
     publisher: book.value.publisher ?? '',
     issue_date: book.value.issue_date ?? '',
@@ -52,18 +54,8 @@ const form = useForm({
                     </div>
                 </div>
                 <div class="col">
-                    <form @submit.prevent="form.patch(route('books.update', book.id))" class="">
-                        <p class="fw-bold">インボイス情報</p>
-                        <div>
-                            <InputLabel for="type" value="書類の種類"/>
-                            <select class="form-select" v-model="form.type">
-                                <option>選択してください</option>
-                                <option v-for="(type, index) in types" :value="index">{{ type }}</option>
-                            </select>
-                            <InputError class="mt-2" :message="form.errors.type"/>
-                        </div>
-
-                        <p class="fw-bold mt-14">電子保存情報</p>
+                    <form @submit.prevent="form.patch(route('books.update', book.id))">
+                        <p class="fw-bold">電子保存情報</p>
                         <div>
                             <InputLabel for="title" value="名前"/>
                             <TextInput
@@ -128,6 +120,44 @@ const form = useForm({
                                 autocomplete="memo"
                             />
                             <InputError class="mt-2" :message="form.errors.memo"/>
+                        </div>
+
+                        <p class="fw-bold mt-14">インボイス情報</p>
+                        <div>
+                            <InputLabel for="type" value="書類の種類"/>
+                            <select class="form-select" v-model="form.type">
+                                <option>選択してください</option>
+                                <option v-for="(type, index) in types" :value="index">{{ type }}</option>
+                            </select>
+                            <InputError class="mt-2" :message="form.errors.type"/>
+                        </div>
+
+                        <div>
+                            <InputLabel for="invoice" value="適格請求書等"/>
+                            <div class="form-check form-check-inline">
+                                <input v-model="form.invoice" type="radio" name="invoice" id="invoice_no"
+                                       class="form-check-input" value="0">
+                                <label class="form-check-label" for="invoice_no">該当しない</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input v-model="form.invoice" type="radio" name="invoice" id="invoice_yes"
+                                       class="form-check-input" value="1">
+                                <label class="form-check-label" for="invoice_yes">該当する</label>
+                            </div>
+                            <InputError class="mt-2" :message="form.errors.invoice"/>
+                        </div>
+
+                        <div>
+                            <InputLabel for="registration_number" value="登録番号"/>
+                            <TextInput
+                                id="registration_number"
+                                type="text"
+                                class="form-control"
+                                :class="{'is-invalid' : form.errors.registration_number}"
+                                v-model="form.registration_number"
+                                autocomplete="registration_number"
+                            />
+                            <InputError class="mt-2" :message="form.errors.registration_number"/>
                         </div>
 
                         <div class="mt-3 text-end">

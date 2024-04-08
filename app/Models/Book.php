@@ -25,6 +25,8 @@ class Book extends Model
 
     protected $fillable = [
         'type',
+        'invoice',
+        'registration_number',
         'title',
         'filename',
         'publisher',
