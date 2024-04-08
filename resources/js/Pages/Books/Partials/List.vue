@@ -132,6 +132,9 @@ export default {
     height: 100%;
     width: 100%;
     animation: auto-hide 3s linear forwards;
+
+    // 枠が表示中でも、編集等のアイコンをクリックできるように
+    pointer-events: none;
 }
 
 @keyframes auto-hide {
