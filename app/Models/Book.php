@@ -12,7 +12,19 @@ class Book extends Model
 {
     use HasFactory, HasUlids;
 
+    /**
+     * 書類の種類ラベル type
+     */
+    const TYPE_LABEL = [
+        1 => '領収書',
+        2 => '通帳',
+        3 => '入出金明細',
+        4 => '納税証明書',
+        5 => '払込書'
+    ];
+
     protected $fillable = [
+        'type',
         'title',
         'filename',
         'publisher',

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
             $table->string('filename');
+            $table->integer('type')->nullable();
             $table->string('title')->nullable();
             $table->string('publisher')->nullable();
             $table->date('issue_date')->nullable();

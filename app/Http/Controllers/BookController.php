@@ -68,6 +68,7 @@ class BookController extends Controller
     {
         return Inertia::render('Books/Edit', [
             'book' => $book,
+            'types' => Book::TYPE_LABEL,
         ]);
     }
 

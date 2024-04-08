@@ -12,9 +12,11 @@ import CustomPopover from "@/Components/CustomPopover.vue";
 import TextareaInput from "@/Components/TextareaInput.vue";
 
 const book = computed(() => usePage().props.book);
+const types = computed(() => usePage().props.types);
 
 const {getJADate, getJADatetime} = useFormatDate();
 const form = useForm({
+    type: book.value.type ?? '',
     title: book.value.title ?? '',
     publisher: book.value.publisher ?? '',
     issue_date: book.value.issue_date ?? '',
@@ -50,8 +52,18 @@ const form = useForm({
                     </div>
                 </div>
                 <div class="col">
-                    <p>付属情報</p>
                     <form @submit.prevent="form.patch(route('books.update', book.id))" class="">
+                        <p class="fw-bold">インボイス情報</p>
+                        <div>
+                            <InputLabel for="type" value="書類の種類"/>
+                            <select class="form-select" v-model="form.type">
+                                <option>選択してください</option>
+                                <option v-for="(type, index) in types" :value="index">{{ type }}</option>
+                            </select>
+                            <InputError class="mt-2" :message="form.errors.type"/>
+                        </div>
+
+                        <p class="fw-bold mt-14">電子保存情報</p>
                         <div>
                             <InputLabel for="title" value="名前"/>
                             <TextInput
