@@ -12,9 +12,23 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
+use BookFormHelper;
 
 class BookController extends Controller
 {
+    /**
+     * @var BookFormHelper
+     */
+    private $formHelper;
+
+    /**
+     * @param BookFormHelper $bookFormHelper
+     */
+    public function __construct(BookFormHelper $bookFormHelper)
+    {
+        $this->formHelper = $bookFormHelper;
+    }
+
     /**
      * 一覧
      * @return Response
@@ -68,7 +82,7 @@ class BookController extends Controller
     {
         return Inertia::render('Books/Edit', [
             'book' => $book,
-            'types' => Book::TYPE_LABEL,
+            'types' => $this->formHelper->getTypeLabel(),
         ]);
     }
 
