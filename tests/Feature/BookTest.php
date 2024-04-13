@@ -16,17 +16,30 @@ class BookTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        // この feature テストで使う user を作成、保存
+        $this->user = User::factory()->create();
+    }
+
+    /**
      * A basic feature test example.
      */
-    public function test_example(): void
+    public function testIndex(): void
     {
-        $user = User::factory()->create();
-        $books = Book::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->get('/books');
+        $books = Book::factory()->for($this->user)->create();
 
+        // ログインしていない場合、リダイレクト(302) -> login 画面へ遷移する
+        $response = $this->get('/books');
+        $response->assertFound()->assertRedirect(route('login'));
+
+        // ログイン済みの場合、books 一覧画面が表示される
+        $response = $this->actingAs($this->user)->get('/books');
         $response->assertOk();
     }
 }
