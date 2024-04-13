@@ -9,8 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
+use Inertia\Testing\AssertableInertia as AssertInertia;
 
-class BookTest extends TestCase
+class BookControllerTest extends TestCase
 {
 
     use RefreshDatabase;
@@ -31,9 +32,6 @@ class BookTest extends TestCase
      */
     public function testIndex(): void
     {
-
-        $books = Book::factory()->for($this->user)->create();
-
         // ログインしていない場合、リダイレクト(302) -> login 画面へ遷移する
         $response = $this->get('/books');
         $response->assertFound()->assertRedirect(route('login'));
@@ -41,5 +39,8 @@ class BookTest extends TestCase
         // ログイン済みの場合、books 一覧画面が表示される
         $response = $this->actingAs($this->user)->get('/books');
         $response->assertOk();
+        $response->assertInertia(fn (AssertInertia $page) => $page
+            ->has('books') // books というプロパティが渡されているか
+        );
     }
 }
