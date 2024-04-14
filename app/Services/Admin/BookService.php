@@ -15,7 +15,7 @@ class BookService extends AdminService implements FileBasePathInterface
      */
     public function getFileBasePath(string $user_id = null): string
     {
-        return 'books/' . $this->user->id . '/';
+        return 'books/' . $this->user->id;
     }
 
     /**

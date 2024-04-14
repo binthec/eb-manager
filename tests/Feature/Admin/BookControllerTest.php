@@ -1,10 +1,13 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
+use App\Models\Book;
 use App\Models\User;
+use App\Services\Admin\BookService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -16,9 +19,14 @@ class BookControllerTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * @var BookService
+     */
+    private BookService $service;
+
+    /**
      * @var string
      */
-    private string $fileDirPath;
+    private string $fileBasePath;
 
     /**
      * @return void
@@ -29,8 +37,13 @@ class BookControllerTest extends TestCase
 
         // この feature テストで使う user を作成、保存
         $this->user = User::factory()->create();
+        Auth::setUser($this->user); // ログインユーザーとしてセット
+
         // ファイルが保存されるディレクトリパス
-        $this->fileDirPath = 'books/' . $this->user->id . '/';
+        $this->service = new BookService();
+
+        // ファイル格納用ディレクトリパス
+        $this->fileBasePath = $this->service->getFileBasePath();
     }
 
     /**
@@ -73,9 +86,26 @@ class BookControllerTest extends TestCase
             ]);
 
         // ファイルが生成されたことを確認
-        Storage::disk('public')->assertExists($this->fileDirPath . $file->hashName());
+        Storage::disk('public')->assertExists($this->fileBasePath . '/' .  $file->hashName());
 
         // アップロード後、index にリダイレクトされることを確認
         $response->assertRedirect(route('books.index'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testEdit() :void
+    {
+        $book = Book::factory()->for($this->user)->create();
+
+        $response = $this->actingAs($this->user)
+            ->get(route('books.edit', $book->id));
+
+        $response->assertOk();
+        $response->assertInertia(fn(AssertInertia $page) => $page
+            ->has('book')
+            ->has('types')
+        );
     }
 }

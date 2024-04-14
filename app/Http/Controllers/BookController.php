@@ -22,11 +22,17 @@ class BookController extends Controller
     private BookService $service;
 
     /**
+     * @var string
+     */
+    private string $fileBasePath;
+
+    /**
      * @param BookService $service
      */
     public function __construct(BookService $service)
     {
         $this->service = $service;
+        $this->fileBasePath = $this->service->getFileBasePath();
     }
 
     /**
@@ -56,10 +62,9 @@ class BookController extends Controller
     public function store(BookStoreRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $fileBasePath = $this->service->getFileBasePath();
 
         // ファイルをストレージに保存
-        $validated['filepath'] = $request->file->store($fileBasePath, 'public');
+        $validated['filepath'] = $request->file->store($this->fileBasePath, 'public');
         // DBに情報を保存
         $request->user()->books()->create($validated);
 
