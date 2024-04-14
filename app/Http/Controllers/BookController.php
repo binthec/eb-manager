@@ -5,28 +5,28 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BookStoreRequest;
 use App\Http\Requests\BookUpdateRequest;
 use App\Models\Book;
+use App\Services\Admin\BookService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Auth;
-use BookFormHelper;
 
 class BookController extends Controller
 {
     /**
-     * @var BookFormHelper
+     * @var BookService
      */
-    private $formHelper;
+    private BookService $service;
 
     /**
-     * @param BookFormHelper $bookFormHelper
+     * @param BookService $service
      */
-    public function __construct(BookFormHelper $bookFormHelper)
+    public function __construct(BookService $service)
     {
-        $this->formHelper = $bookFormHelper;
+        $this->service = $service;
     }
 
     /**
@@ -56,9 +56,10 @@ class BookController extends Controller
     public function store(BookStoreRequest $request): RedirectResponse
     {
         $validated = $request->validated();
+        $fileBasePath = $this->service->getFileBasePath();
 
         // ファイルをストレージに保存
-        $validated['filepath'] = $request->file->store('books/' . $request->user()->id, 'public');
+        $validated['filepath'] = $request->file->store($fileBasePath, 'public');
         // DBに情報を保存
         $request->user()->books()->create($validated);
 
@@ -82,7 +83,7 @@ class BookController extends Controller
     {
         return Inertia::render('Books/Edit', [
             'book' => $book,
-            'types' => $this->formHelper->getTypeLabel(),
+            'types' => $this->service->getTypeLabel(),
         ]);
     }
 
