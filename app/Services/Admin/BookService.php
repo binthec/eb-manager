@@ -2,20 +2,45 @@
 
 namespace App\Services\Admin;
 
-use App\Infrastructures\FileBasePathInterface;
+use App\Interfaces\BookRepositoryInterface;
+use App\Interfaces\FileBasePathInterface;
 use App\Utilities\FormUtility;
+use Illuminate\Support\Collection;
 
 class BookService extends AdminService implements FileBasePathInterface
 {
+
     /**
-     * ファイル保存用ディレクトリを返す
-     *
-     * @param string|null $user_id
+     * @var BookRepositoryInterface
+     */
+    private BookRepositoryInterface $bookRepository;
+
+    /**
+     * @param BookRepositoryInterface $bookRepository
+     */
+    public function __construct(BookRepositoryInterface $bookRepository)
+    {
+        $this->bookRepository = $bookRepository;
+    }
+
+    /**
+     * @param string $userId
+     * @param bool $latest
+     * @return Collection
+     */
+    public function findByUserId(string $userId, bool $latest = true): Collection
+    {
+        return $this->bookRepository->findByUserId($userId, $latest);
+    }
+
+    /**
+     * ファイル保存用ディレクトリのパス
+     * @param string $userId
      * @return string
      */
-    public function getFileBasePath(string $user_id = null): string
+    public function getFileBasePath(string $userId): string
     {
-        return 'books/' . $this->user->id;
+        return 'books/' . $userId;
     }
 
     /**
@@ -23,7 +48,7 @@ class BookService extends AdminService implements FileBasePathInterface
      *
      * @return array
      */
-    public function getTypeLabel() : array
+    public function getTypeLabel(): array
     {
         return FormUtility::BOOK_TYPE_LABEL;
     }

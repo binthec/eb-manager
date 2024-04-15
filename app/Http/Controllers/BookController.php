@@ -32,7 +32,7 @@ class BookController extends Controller
     public function __construct(BookService $service)
     {
         $this->service = $service;
-        $this->fileBasePath = $this->service->getFileBasePath();
+        $this->fileBasePath = $this->service->getFileBasePath(Auth::id());
     }
 
     /**
@@ -42,7 +42,7 @@ class BookController extends Controller
     public function index(): Response
     {
         return Inertia::render('Books/Index', [
-            'books' => Book::where('user_id', Auth::id())->with('user:id,name')->latest()->get(),
+            'books' => $this->service->findByUserId(Auth::id()),
         ]);
     }
 
