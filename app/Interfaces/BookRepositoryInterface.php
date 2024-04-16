@@ -34,7 +34,7 @@ interface BookRepositoryInterface
      * @param array $bookDetails
      * @return Book
      */
-    public function createBook(array $bookDetails) :Book;
+    public function create(array $bookDetails) :Book;
 
     /**
      * book を更新

@@ -13,6 +13,7 @@ class Book extends Model
     use HasFactory, HasUlids;
 
     protected $fillable = [
+        'user_id',
         'type',
         'invoice',
         'registration_number',

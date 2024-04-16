@@ -4,8 +4,10 @@ namespace App\Services\Admin;
 
 use App\Interfaces\BookRepositoryInterface;
 use App\Interfaces\FileBasePathInterface;
+use App\Models\Book;
 use App\Utilities\FormUtility;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class BookService extends AdminService implements FileBasePathInterface
 {
@@ -31,6 +33,15 @@ class BookService extends AdminService implements FileBasePathInterface
     public function findByUserId(string $userId, bool $latest = true): Collection
     {
         return $this->bookRepository->findByUserId($userId, $latest);
+    }
+
+    /**
+     * @param array $bookDetails
+     * @return Book
+     */
+    public function create(array $bookDetails): Book
+    {
+        return $this->bookRepository->create($bookDetails);
     }
 
     /**

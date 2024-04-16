@@ -66,7 +66,7 @@ class BookController extends Controller
         // ファイルをストレージに保存
         $validated['filepath'] = $request->file->store($this->fileBasePath, 'public');
         // DBに情報を保存
-        $request->user()->books()->create($validated);
+        $this->service->create($validated);
 
         return redirect(route('books.index'));
     }

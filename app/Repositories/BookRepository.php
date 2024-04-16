@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Interfaces\BookRepositoryInterface;
 use App\Models\Book;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 class BookRepository implements BookRepositoryInterface
@@ -43,8 +45,9 @@ class BookRepository implements BookRepositoryInterface
      * @param array $bookDetails
      * @return Book
      */
-    public function createBook(array $bookDetails) :Book
+    public function create(array $bookDetails) : Book
     {
+        $bookDetails['user_id'] = Auth::id(); // TODO: リレーションについて再考する
         return Book::create($bookDetails);
     }
 
