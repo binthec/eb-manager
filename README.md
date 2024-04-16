@@ -21,6 +21,7 @@ Vue.js のバージョンは 3.4。Composition API を使用。
 
 ## Todo
 
+- role を追加する
 - ~~ID に ULID を使う用に変更~~ Done!
 - リポジトリパターン適用
 - 電子帳簿機能
