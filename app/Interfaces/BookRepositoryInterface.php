@@ -40,9 +40,9 @@ interface BookRepositoryInterface
      * book を更新
      * @param $bookId
      * @param array $bookDetails
-     * @return Book
+     * @return bool
      */
-    public function updateBook($bookId, array $bookDetails) :Book;
+    public function update($bookId, array $bookDetails) :bool;
 
     /**
      * book を削除

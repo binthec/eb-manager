@@ -45,6 +45,16 @@ class BookService extends AdminService implements FileBasePathInterface
     }
 
     /**
+     * @param string $bookId
+     * @param array $bookDetail
+     * @return bool
+     */
+    public function update(string $bookId, array $bookDetail) :bool
+    {
+        return $this->bookRepository->update($bookId, $bookDetail);
+    }
+
+    /**
      * ファイル保存用ディレクトリのパス
      * @param string $userId
      * @return string

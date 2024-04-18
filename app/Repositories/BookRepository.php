@@ -54,9 +54,9 @@ class BookRepository implements BookRepositoryInterface
     /**
      * @param $bookId
      * @param array $newDetails
-     * @return Book
+     * @return bool
      */
-    public function updateBook($bookId, array $newDetails) :Book
+    public function update($bookId, array $newDetails) :bool
     {
         return Book::whereId($bookId)->update($newDetails);
     }

@@ -84,7 +84,7 @@ class BookController extends Controller
      * @param Book $book
      * @return Response
      */
-    public function edit(Book $book) :Response
+    public function edit(Book $book): Response
     {
         return Inertia::render('Books/Edit', [
             'book' => $book,
@@ -98,13 +98,13 @@ class BookController extends Controller
      * @param Book $book
      * @return RedirectResponse
      */
-    public function update(BookUpdateRequest $request, Book $book) :RedirectResponse
+    public function update(BookUpdateRequest $request, Book $book): RedirectResponse
     {
         sleep(1);
         Gate::authorize('update', $book);
 
         $validated = $request->validated();
-        $book->update($validated);
+        $this->service->update($book->id, $validated);
 
         return redirect(route('books.edit', $book->id));
     }
