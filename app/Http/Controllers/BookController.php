@@ -122,7 +122,7 @@ class BookController extends Controller
 
         // ファイルの実体を削除。削除出来たら、DBレコードも削除
         if (Storage::delete($book->filepath)) {
-            $book->delete();
+            $this->service->destroy($book->id);
         }
 
         return redirect(route('books.index'));

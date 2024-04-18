@@ -49,6 +49,6 @@ interface BookRepositoryInterface
      * @param $bookId
      * @return bool
      */
-    public function deleteBook($bookId):bool;
+    public function destroy($bookId):bool;
 
 }

@@ -55,6 +55,15 @@ class BookService extends AdminService implements FileBasePathInterface
     }
 
     /**
+     * @param string $bookId
+     * @return bool
+     */
+    public function destroy(string $bookId) :bool
+    {
+        return $this->bookRepository->destroy($bookId);
+    }
+
+    /**
      * ファイル保存用ディレクトリのパス
      * @param string $userId
      * @return string
