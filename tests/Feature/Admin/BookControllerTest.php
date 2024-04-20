@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Book;
 use App\Models\User;
+use App\Repositories\BookRepository;
 use App\Services\Admin\BookService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -29,6 +30,11 @@ class BookControllerTest extends TestCase
     private string $fileBasePath;
 
     /**
+     * @var BookRepository
+     */
+    private BookRepository $bookRepository;
+
+    /**
      * @return void
      */
     public function setUp(): void
@@ -40,10 +46,10 @@ class BookControllerTest extends TestCase
         Auth::setUser($this->user); // ログインユーザーとしてセット
 
         // ファイルが保存されるディレクトリパス
-        $this->service = new BookService();
+        $this->service = new BookService(new BookRepository());
 
         // ファイル格納用ディレクトリパス
-        $this->fileBasePath = $this->service->getFileBasePath();
+        $this->fileBasePath = $this->service->getFileBasePath($this->user->id);
     }
 
     /**
@@ -95,7 +101,7 @@ class BookControllerTest extends TestCase
     /**
      * @return void
      */
-    public function testEdit() :void
+    public function testEdit(): void
     {
         $book = Book::factory()->for($this->user)->create();
 
@@ -107,5 +113,19 @@ class BookControllerTest extends TestCase
             ->has('book')
             ->has('types')
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdate(): void
+    {
+        $book = Book::factory()->for($this->user)->create();
+
+        $response = $this
+            ->actingAs($this->user)
+            ->patch(route('books.update', $book->id));
+
+        $response->assertRedirect(route('books.edit', $book->id));
     }
 }
