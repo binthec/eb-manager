@@ -20,6 +20,11 @@ class BookControllerTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * @var Book
+     */
+    private Book $book;
+
+    /**
      * @var BookService
      */
     private BookService $service;
@@ -50,6 +55,8 @@ class BookControllerTest extends TestCase
 
         // ファイル格納用ディレクトリパス
         $this->fileBasePath = $this->service->getFileBasePath($this->user->id);
+
+        $this->book = Book::factory()->for($this->user)->create();
     }
 
     /**
@@ -127,5 +134,19 @@ class BookControllerTest extends TestCase
             ->patch(route('books.update', $book->id));
 
         $response->assertRedirect(route('books.edit', $book->id));
+    }
+
+    /**
+     * @return void
+     */
+    public function testDestroy() :void
+    {
+        $book = Book::factory()->for($this->user)->create();
+
+        $response = $this
+            ->actingAs($this->user)
+            ->delete(route('books.destroy', $book->id));
+
+        $response->assertRedirect(route('books.index'));
     }
 }
