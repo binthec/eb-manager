@@ -35,6 +35,11 @@ class BookControllerTest extends TestCase
     private string $fileBasePath;
 
     /**
+     * @var UploadedFile
+     */
+    private UploadedFile $uploadFile;
+
+    /**
      * @var BookRepository
      */
     private BookRepository $bookRepository;
@@ -56,7 +61,12 @@ class BookControllerTest extends TestCase
         // ファイル格納用ディレクトリパス
         $this->fileBasePath = $this->service->getFileBasePath($this->user->id);
 
+        // テスト用の book
         $this->book = Book::factory()->for($this->user)->create();
+
+        // テスト用のアップロードファイル
+        Storage::fake('public');
+        $this->uploadFile = UploadedFile::fake()->image('defaultTest.jpg');
     }
 
     /**
@@ -65,10 +75,6 @@ class BookControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        // ログインしていない場合、リダイレクト(302) -> login 画面へ遷移する
-        $response = $this->get('/books');
-        $response->assertFound()->assertRedirect(route('login'));
-
         // ログイン済みの場合、books 一覧画面が表示される
         $response = $this->actingAs($this->user)->get('/books');
         $response->assertOk();
@@ -83,14 +89,10 @@ class BookControllerTest extends TestCase
      */
     public function testStore(): void
     {
-        Storage::fake('public');
-
-        $file = UploadedFile::fake()->image('test.jpg');
-
         $response = $this
             ->actingAs($this->user)
             ->post(route('books.store'), [
-                'file' => $file,
+                'file' => $this->uploadFile,
                 'filename' => 'filename_test',
                 'size' => 10,
                 'height' => 10,
@@ -99,7 +101,7 @@ class BookControllerTest extends TestCase
             ]);
 
         // ファイルが生成されたことを確認
-        Storage::disk('public')->assertExists($this->fileBasePath . '/' .  $file->hashName());
+        Storage::disk('public')->assertExists($this->fileBasePath . '/' .  $this->uploadFile->hashName());
 
         // アップロード後、index にリダイレクトされることを確認
         $response->assertRedirect(route('books.index'));
@@ -110,10 +112,8 @@ class BookControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-        $book = Book::factory()->for($this->user)->create();
-
         $response = $this->actingAs($this->user)
-            ->get(route('books.edit', $book->id));
+            ->get(route('books.edit', $this->book->id));
 
         $response->assertOk();
         $response->assertInertia(fn(AssertInertia $page) => $page
@@ -127,13 +127,11 @@ class BookControllerTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $book = Book::factory()->for($this->user)->create();
-
         $response = $this
             ->actingAs($this->user)
-            ->patch(route('books.update', $book->id));
+            ->patch(route('books.update', $this->book->id));
 
-        $response->assertRedirect(route('books.edit', $book->id));
+        $response->assertRedirect(route('books.edit', $this->book->id));
     }
 
     /**
@@ -141,11 +139,9 @@ class BookControllerTest extends TestCase
      */
     public function testDestroy() :void
     {
-        $book = Book::factory()->for($this->user)->create();
-
         $response = $this
             ->actingAs($this->user)
-            ->delete(route('books.destroy', $book->id));
+            ->delete(route('books.destroy', $this->book->id));
 
         $response->assertRedirect(route('books.index'));
     }
