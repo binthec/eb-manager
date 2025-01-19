@@ -1,4 +1,4 @@
-# Electronic Books Manager
+# Laravel11 on Docker(sail)
 
 ## 概要
 Laravel 11 と Vue.js 3 を使ってSPAの学習と実装をしている個人のプロジェクト。
