@@ -37,6 +37,7 @@ Vue.js のバージョンは 3.4。Composition API を使用。
 - フロントをLPっぽくする
   - Bootstrap5.3の[カルーセル](https://getbootstrap.jp/docs/5.3/components/carousel/)を入れる
   - 管理画面からカルーセル用の画像をアップロードする機能を追加
+- いいね機能をつける
 
 And More...
 
